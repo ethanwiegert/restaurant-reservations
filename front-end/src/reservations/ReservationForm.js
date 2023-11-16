@@ -1,14 +1,30 @@
 import React from "react";
+import ErrorAlert from "../layout/ErrorAlert";
 
 import { Link, useHistory } from "react-router-dom";
 
 function ReservationForm(){
+
+    const [formError, setFormError] = useState(null);
     
     const history=useHistory()
     
     
     
-    
+    async function handleSubmit(event) {
+    event.preventDefault()
+    const abortController = new AbortController();
+    setFormError(null);
+    saveReservations({ data }, abortController.signal)
+      .catch(setFormError);
+    return () => abortController.abort();
+  }
+
+   function handleCancel(event){
+        event.preventDefault()
+        history.go(-1)
+    }
+
     
     /*
     Features left to add:
@@ -44,9 +60,10 @@ function ReservationForm(){
                 <input id="time" name="time" type="time" required/>
                 </div>
 
-                <button type="cancel button " className="btn btn-danger mb-2" onClick={(()=>history.go(-1))}></button>
+                <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}></button>
                 <button type="submit button" className="btn btn-success mb-2">Submit</button>
             </form>
+            <ErrorAlert error={formError} />
         </div>
     )
 }
