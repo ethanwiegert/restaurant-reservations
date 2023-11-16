@@ -22,7 +22,7 @@ function ReservationForm(){
 
    function handleCancel(event){
         event.preventDefault()
-        history.go(-1)
+        history.goBack()
     }
 
     
@@ -34,7 +34,7 @@ function ReservationForm(){
     
     return(
         <div>
-            <form className="row">
+            <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                 <label className="form-label">First Name</label>
                 <input id="firstName" name="firstName" type="text" required/>
