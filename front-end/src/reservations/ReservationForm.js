@@ -60,6 +60,11 @@ function ReservationForm(){
                 <input id="reservation_time" name="reservation_time" type="time" required/>
                 </div>
 
+                <div className="col-md-6">
+                <label className="form-label">People</label>
+                <input id="people" name="people" type="number" required/>
+                </div>
+
                 <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}></button>
                 <button type="submit button" className="btn btn-success mb-2">Submit</button>
             </form>
