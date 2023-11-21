@@ -1,24 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import { Link, useHistory } from "react-router-dom";
 
 function ReservationForm(){
 
+    const [reservation, setReservation] = useState({});
     const [formError, setFormError] = useState(null);
     
     const history=useHistory()
     
+    function handleChange(target){
+        setReservation({
+            ...reservation,
+            [target.name]: target.value
+        })
+    }
     
-    
-    async function handleSubmit(event) {
+   async function handleSubmit(event) {
     event.preventDefault()
     const abortController = new AbortController();
     setFormError(null);
-    saveReservations({ data }, abortController.signal)
-      .catch(setFormError);
     return () => abortController.abort();
   }
+  
 
    function handleCancel(event){
         event.preventDefault()
@@ -37,32 +42,32 @@ function ReservationForm(){
             <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                 <label className="form-label">First Name</label>
-                <input id="first_name" name="first_name" type="text" required/>
+                <input id="first_name" name="first_name" type="text" onChange={handleChange} required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Last Name</label>
-                <input id="last_name" name="last_name" type="text" required/>
+                <input id="last_name" name="last_name" type="text" onChange={handleChange} required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Mobile Number</label>
-                <input id="mobile_number" name="mobile_number" type="tel" pattern="tel" required/>
+                <input id="mobile_number" name="mobile_number" type="tel" pattern="tel" onChange={handleChange} required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Reservation Date</label>
-                <input id="reservation_date" name="reservation_date" type="date" required/>
+                <input id="reservation_date" name="reservation_date" type="date" onChange={handleChange} required/>
                 </div>
                 
                 <div className="col-md-6">
                 <label className="form-label">Reservation Time</label>
-                <input id="reservation_time" name="reservation_time" type="time" required/>
+                <input id="reservation_time" name="reservation_time" type="time" onChange={handleChange} required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">People</label>
-                <input id="people" name="people" type="number" required/>
+                <input id="people" name="people" type="number" onChange={handleChange} required/>
                 </div>
 
                 <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}></button>

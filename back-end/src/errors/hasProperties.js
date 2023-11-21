@@ -14,6 +14,7 @@ return function(res, req, next){
     catch(error){
         next(error)
     }
+    next()
 }
 }
 
