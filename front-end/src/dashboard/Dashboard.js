@@ -9,6 +9,10 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const dateNow=new Date(Date.now())
+  const dateToday=dateNow.toLocaleDateString()
+  date=dateToday.replaceAll("/", "-")
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
