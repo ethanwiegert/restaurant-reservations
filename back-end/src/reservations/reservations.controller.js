@@ -14,14 +14,13 @@ const ValidProperties=[
   "people",
 ]
 
-function hasValidFields(req, res, next){
-  const {data={}}=req.body
-  const invalidFields=Object.keys(data).filter((field)=>
-  !ValidProperties.includes(field))
-  if(invalidFields.length){
+async function reservationForDateExists(req, res, next){
+  const date=req.query.date
+  const data=await service.list(date)
+  if(!data.length){
     return next({
       status:400,
-      message: `Invalid field(s): ${invalidFields.join(", ")}`
+      message: `No reservations for the data ${date} found`
     })
   }
   next()
@@ -49,6 +48,6 @@ async function create(req, res, next){
 }
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [reservationForDateExists, asyncErrorBoundary(list)],
   create: [hasRequiredFields, asyncErrorBoundary(create)],
 };
