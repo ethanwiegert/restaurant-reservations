@@ -67,10 +67,10 @@ function checkTimeAndDate(req, res, next){
   if (minute < 0 || minute > 59) {
     return next({ status: 400, message: 'reservation_time is not a valid time' });
   }
-  if(minute >= 30 || hour >= 21){
+  if(minute >= 30 && hour >= 21){
     return next({ status: 400, message: 'reservation_time is not a valid time, too close to closing' });
   }
-  if(minute <= 30 || hour <= 10){
+  if(minute <= 30 && hour <= 10){
     return next({ status: 400, message: 'reservation_time is not a valid time, not opened' });
   }
   next()
@@ -87,9 +87,8 @@ function checkFutureDate(req, res, next){
 
 function checkNotTuesday(req, res, next){
   const date=req.body.data.reservation_date
-  let dateReserved=new Date(date)
-  let dayOfWeek=dateReserved.getDay()
-  if(dayOfWeek===2){ return next({
+  const day = new Date(date).getUTCDay()
+  if(day===2){ return next({
     status:400,
     message: `reservation_date invalid for Tuesday, restaurant is closed`,
   })}
@@ -110,5 +109,5 @@ async function create(req, res, next){
 
 module.exports = {
   list: [reservationForDateExists, asyncErrorBoundary(list)],
-  create: [hasRequiredFields, checkPeople, checkTimeAndDate, checkFutureDate, checkNotTuesday, asyncErrorBoundary(create)],
+  create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, asyncErrorBoundary(create)],
 };
