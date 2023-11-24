@@ -11,20 +11,19 @@ import {today, next, previous} from "../utils/date-time"
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  date=today()
 
   const history=useHistory()
 
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [dateToday, setDateToday] = useState(date)
-
+  
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ dateToday }, abortController.signal)
+    listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
@@ -33,12 +32,21 @@ function Dashboard({ date }) {
   const handleNextDay = (event) => {
     event.preventDefault();
     history.push(`/dashboard?date=${next(dateToday)}`);
+    setDateToday(next(dateToday))
+    console.log(dateToday)
+  }
+
+  const handleToday = (event) =>{
+    event.preventDefault();
+    history.push(`/dashboard?date=${today()}`);
+    setDateToday(today())
     console.log(dateToday)
   }
 
 const handlePreviousDay = (event) => {
   event.preventDefault();
   history.push(`/dashboard?date=${previous(dateToday)}`);
+  setDateToday(previous(dateToday))
   console.log(dateToday)
 }
 
@@ -49,6 +57,7 @@ const handlePreviousDay = (event) => {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <button onClick={handleNextDay}>Next Day</button>
+      <button onClick={handleToday}>Today</button>
       <button onClick={handlePreviousDay}>Previous Day</button>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
