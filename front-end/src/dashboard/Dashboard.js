@@ -29,36 +29,31 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  const handleNextDay = (event) => {
-    event.preventDefault();
-    history.push(`/dashboard?date=${next(dateToday)}`);
+  function handleNext() {
     setDateToday(next(dateToday))
-    console.log(dateToday)
+    history.push(`/dashboard?date=${next(dateToday)}`);
+   
   }
 
-  const handleToday = (event) =>{
-    event.preventDefault();
-    history.push(`/dashboard?date=${today()}`);
-    setDateToday(today())
-    console.log(dateToday)
+  function handleToday() {
+    setDateToday(today)
+    history.push(`/dashboard?date=${date}`);
   }
 
-const handlePreviousDay = (event) => {
-  event.preventDefault();
-  history.push(`/dashboard?date=${previous(dateToday)}`);
-  setDateToday(previous(dateToday))
-  console.log(dateToday)
-}
+  function handlePrev() {
+    setDateToday(previous(dateToday))
+    history.push(`/dashboard?date=${previous(dateToday)}`);
+  }
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
-      <button onClick={handleNextDay}>Next Day</button>
-      <button onClick={handleToday}>Today</button>
-      <button onClick={handlePreviousDay}>Previous Day</button>
+      <button className="btn btn-primary mr-2 mb-3" type="next" onClick={handleNext}>Next</button>
+      <button className="btn btn-primary mr-2 mb-3" type="today" onClick={handleToday}>Today</button>
+        <button className="btn btn-primary mr-2 mb-3" type="previous" onClick={handlePrev}>Previous</button>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
     </main>
