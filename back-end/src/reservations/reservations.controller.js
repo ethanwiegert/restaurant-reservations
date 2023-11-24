@@ -49,18 +49,44 @@ else{
 
 function checkTimeAndDate(req, res, next){
   const date=req.body.data.reservation_date
-  const time=req.body.data.reservation_time
-  if(checkDate.includes(/^[a-zA-Z]+$/)){
+
+  if(!Date.parse(date)){
     return next({
       status:400,
       message: `reservation_date is in incorrect format`
     })
-  } else if(checkTime.includes(/^[a-zA-Z]+$/)){
-    return next({
-      status:400,
-      message: `reservation_time is in incorrect format`
-    })
   }
+  const [hour, minute] = req.body.data.reservation_time.split(":");
+
+  if (hour.length > 2 || minute.length > 2) {
+    return next({ status: 400, message: 'reservation_time is not a valid time' });
+  }
+  if (hour < 1 || hour > 23) {
+    return next({ status: 400, message: 'reservation_time is not a valid time' });
+  }
+  if (minute < 0 || minute > 59) {
+    return next({ status: 400, message: 'reservation_time is not a valid time' });
+  }
+  next()
+}
+
+function checkFutureDate(req, res, next){
+  const date=req.body.data.reservation_date
+  let today=Date.now()
+  if(today>Date.parse(date)){
+    return next({ status: 400, message: 'reservation_date cannot be a future date' });
+  }
+  next()
+}
+
+function checkNotTuesday(req, res, next){
+  const date=req.body.data.reservation_date
+  let dateReserved=new Date(date)
+  let dayOfWeek=dateReserved.getDay()
+  if(dayOfWeek===2){ return next({
+    status:400,
+    message: `reservation_date invalid for Tuesday, restaurant is closed`,
+  })}
   next()
 }
 
@@ -78,5 +104,5 @@ async function create(req, res, next){
 
 module.exports = {
   list: [reservationForDateExists, asyncErrorBoundary(list)],
-  create: [hasRequiredFields, checkPeople, checkTimeAndDate, asyncErrorBoundary(create)],
+  create: [hasRequiredFields, checkPeople, checkTimeAndDate, checkFutureDate, checkNotTuesday, asyncErrorBoundary(create)],
 };
