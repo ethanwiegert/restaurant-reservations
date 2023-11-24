@@ -33,7 +33,36 @@ const hasRequiredFields=hasProperties("first_name",
 "reservation_time",
 "people")
 
+function checkPeople(req, res, next){
+const people=req.body.data.people
+let value=typeof people
+if(value==="number"){
+next()
+}
+else{
+  return next({
+    status:400,
+    message: `people must be a number`
+  })
+}
+}
 
+function checkTimeAndDate(req, res, next){
+  const date=req.body.data.reservation_date
+  const time=req.body.data.reservation_time
+  if(checkDate.includes(/^[a-zA-Z]+$/)){
+    return next({
+      status:400,
+      message: `reservation_date is in incorrect format`
+    })
+  } else if(checkTime.includes(/^[a-zA-Z]+$/)){
+    return next({
+      status:400,
+      message: `reservation_time is in incorrect format`
+    })
+  }
+  next()
+}
 
 async function list(req, res) {
   const date=req.query.date
@@ -49,5 +78,5 @@ async function create(req, res, next){
 
 module.exports = {
   list: [reservationForDateExists, asyncErrorBoundary(list)],
-  create: [hasRequiredFields, asyncErrorBoundary(create)],
+  create: [hasRequiredFields, checkPeople, checkTimeAndDate, asyncErrorBoundary(create)],
 };
