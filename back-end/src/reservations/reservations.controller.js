@@ -67,6 +67,12 @@ function checkTimeAndDate(req, res, next){
   if (minute < 0 || minute > 59) {
     return next({ status: 400, message: 'reservation_time is not a valid time' });
   }
+  if(minute >= 30 || hour >= 21){
+    return next({ status: 400, message: 'reservation_time is not a valid time, too close to closing' });
+  }
+  if(minute <= 30 || hour <= 10){
+    return next({ status: 400, message: 'reservation_time is not a valid time, not opened' });
+  }
   next()
 }
 

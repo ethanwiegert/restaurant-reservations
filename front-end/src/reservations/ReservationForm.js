@@ -34,7 +34,8 @@ function ReservationForm(){
          const response= await createReservation(reservation, abortController)  
         } catch (e){
             console.log(e.name)
-            setFormError(e)
+            if(formError=null){setFormError([e])}
+            else{formError.push(e)}
         }
         return () => abortController.abort();
       }
@@ -81,7 +82,14 @@ function ReservationForm(){
                 <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
                 <button type="submit button" className="btn btn-success mb-2">Submit</button>
             </form>
-            <h5 className="alert alert-danger"></h5>
+
+            {formError.map((error)=>(
+                <div>
+                    <h5 className="alert alert-danger">{error}</h5>
+                </div>
+            )
+
+            )}
         </div>
     )
 }
