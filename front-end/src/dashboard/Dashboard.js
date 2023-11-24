@@ -10,10 +10,11 @@ import {today, next, previous} from "../utils/date-time"
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  date=today()
 
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  [date, setDate] = useState(today())
+  const [dateToday, setDateToday] = useState(date)
 
   useEffect(loadDashboard, [date]);
 
@@ -28,12 +29,12 @@ function Dashboard({ date }) {
 
   function handleNextDay(event){
     event.preventDefault()
-    setDate(next(date))
+    setDateToday(next(dateToday))
 }
 
 function handlePreviousDay(event){
   event.preventDefault()
-  setDate(previous(date))
+  setDateToday(previous(dateToday))
 }
 
   return (

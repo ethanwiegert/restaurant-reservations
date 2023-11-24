@@ -11,7 +11,7 @@ function ReservationForm(){
     
     const history=useHistory()
     
-    useEffect(()=>submitHandler, [])
+    useEffect(()=>handleSubmit, [])
 
     function handleChange(target){
         setReservation({
