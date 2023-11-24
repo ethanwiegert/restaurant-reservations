@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {today, next, previous} from "../utils/date-time"
@@ -12,6 +13,8 @@ import {today, next, previous} from "../utils/date-time"
 function Dashboard({ date }) {
   date=today()
 
+  const history=useHistory()
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [dateToday, setDateToday] = useState(date)
@@ -21,20 +24,22 @@ function Dashboard({ date }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ dateToday }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
 
-  function handleNextDay(event){
-    event.preventDefault()
-    setDateToday(next(dateToday))
-}
+  const handleNextDay = (event) => {
+    event.preventDefault();
+    history.push(`/dashboard?date=${next(dateToday)}`);
+    console.log(dateToday)
+  }
 
-function handlePreviousDay(event){
-  event.preventDefault()
-  setDateToday(previous(dateToday))
+const handlePreviousDay = (event) => {
+  event.preventDefault();
+  history.push(`/dashboard?date=${previous(dateToday)}`);
+  console.log(dateToday)
 }
 
   return (
