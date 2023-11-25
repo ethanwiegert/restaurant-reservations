@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {today, next, previous} from "../utils/date-time"
+import useQuery from "../utils/useQuery"
 
 /**
  * Defines the dashboard page.
@@ -13,12 +14,13 @@ import {today, next, previous} from "../utils/date-time"
 function Dashboard({ date }) {
 
   const history=useHistory()
+  const query = useQuery()
 
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [dateToday, setDateToday] = useState(date)
+  const [dateToday, setDateToday] = useState(query.get("date") || today());
   
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [dateToday]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -36,8 +38,8 @@ function Dashboard({ date }) {
   }
 
   function handleToday() {
-    setDateToday(today)
-    history.push(`/dashboard?date=${date}`);
+    setDateToday(dateToday)
+    history.push(`/dashboard?date=${dateToday}`);
   }
 
   function handlePrev() {
@@ -49,7 +51,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date}</h4>
+        <h4 className="mb-0">Reservations for date {dateToday}</h4>
       </div>
       <button className="btn btn-primary mr-2 mb-3" type="next" onClick={handleNext}>Next</button>
       <button className="btn btn-primary mr-2 mb-3" type="today" onClick={handleToday}>Today</button>

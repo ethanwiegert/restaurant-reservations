@@ -7,7 +7,7 @@ import{createReservation} from"../utils/api"
 function ReservationForm(){
 
     const [reservation, setReservation] = useState({});
-    const [formError, setFormError] = useState(null);
+    const [formError, setFormError] = useState([]);
     
     const history=useHistory()
     
@@ -34,7 +34,7 @@ function ReservationForm(){
          const response= await createReservation(reservation, abortController)  
         } catch (e){
             console.log(e.name)
-            if(formError=null){setFormError([e])}
+            if(formError=[]){setFormError([e])}
             else{formError.push(e)}
         }
         return () => abortController.abort();
