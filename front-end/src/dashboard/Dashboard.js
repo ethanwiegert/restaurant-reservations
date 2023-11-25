@@ -25,7 +25,7 @@ function Dashboard({ date }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ date: dateToday }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
@@ -38,8 +38,8 @@ function Dashboard({ date }) {
   }
 
   function handleToday() {
-    setDateToday(dateToday)
-    history.push(`/dashboard?date=${dateToday}`);
+    setDateToday(today())
+    history.push(`/dashboard?date=${today()}`);
   }
 
   function handlePrev() {
