@@ -107,7 +107,14 @@ async function create(req, res, next){
   res.status(201).json({data: reservation})
 }
 
+async function read(req, res, next) {
+  const {reservationId}=req.params
+  const data=await service.read(reservationId)
+  res.json({ data });
+}
+
 module.exports = {
-  list: [reservationForDateExists, asyncErrorBoundary(list)],
+  list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
   create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, asyncErrorBoundary(create)],
+  read:[asyncErrorBoundary(read)]
 };
