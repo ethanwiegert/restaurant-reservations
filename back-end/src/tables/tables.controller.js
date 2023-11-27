@@ -54,7 +54,13 @@ async function create(req, res, next){
     res.status(201).json({data: table})
 }
 
+async function list(req, res, next){
+    const data=await service.list()
+    res.json({ data });
+}
+
   module.exports={
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-    create:[hasRequiredFields, checkCapacity, asyncErrorBoundary(create)]
+    create:[hasRequiredFields, checkCapacity, asyncErrorBoundary(create)],
+    list:[asyncErrorBoundary(list)],
 };
