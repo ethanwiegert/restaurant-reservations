@@ -31,7 +31,7 @@ function TableForm(){
         const abortController = new AbortController();
         setFormError(null);
         try{
-         const response= await createTable(reservation, abortController)  
+         const response= await createTable(table, abortController)  
          history.push("/dashboard")
         } catch (e){
             console.log(e.name)
