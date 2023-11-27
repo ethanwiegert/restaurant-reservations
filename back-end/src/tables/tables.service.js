@@ -12,6 +12,13 @@ function read(tableId){
     .where({table_id:tableId})
 }
 
+function create(table){
+    return knex("tables")
+    .insert(table)
+    .returning("*")
+    .then((createdRecords)=>createdRecords[0])
+}
+
 
 
 
@@ -19,4 +26,5 @@ function read(tableId){
 module.exports={
     list,
     read,
+    create
 }
