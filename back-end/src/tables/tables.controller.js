@@ -38,14 +38,14 @@ async function checkTableCapacity(req, res, next){
 }
 
 async function checkIfOccupied(req, res, next){
-    const {reservation_id}=res.local.reservation
+    const {reservation_id}=res.locals.table
     if(reservation_id){
         return next({
             status:404,
             message: `Table is currently occupied`
           })
     }
-    next()
+    return next()
 }
 
 async function tableExists(req, res, next){
@@ -105,8 +105,9 @@ async function list(req, res, next){
 }
 
 async function update(req, res, next){
-    const data=await service.update(req.body.data)
-    res.json({data})
+    const updatedTable=[res.locals.table, req.body.data]
+    const data=await service.update(updatedTable)
+    res.status(200).json({data})
 }
 
   module.exports={
