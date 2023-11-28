@@ -10,7 +10,7 @@ async function tableExists(req, res, next){
     const data=await service.read(tableId)
     if(!data.length){
       return next({
-        status:400,
+        status:404,
         message: `No table with ID ${tableId} found`
       })
     }
@@ -39,6 +39,7 @@ function checkTableName(req, res, next){
         message: `table_name must be at least 2 characters long`,
       })
     }
+    next()
 }
 
 async function read(req, res, next) {
@@ -50,7 +51,7 @@ async function read(req, res, next) {
 async function create(req, res, next){
     const table=req.body.data
     const { table_id } = await service.create(table);
-    reservation.table_id = table_id;
+    table.table_id = table_id;
     res.status(201).json({data: table})
 }
 
@@ -61,6 +62,6 @@ async function list(req, res, next){
 
   module.exports={
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-    create:[hasRequiredFields, checkCapacity, asyncErrorBoundary(create)],
+    create:[hasRequiredFields, checkCapacity, checkTableName, asyncErrorBoundary(create)],
     list:[asyncErrorBoundary(list)],
 };

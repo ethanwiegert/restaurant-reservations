@@ -110,7 +110,7 @@ async function create(req, res, next){
 async function read(req, res, next) {
   const {reservationId}=req.params
   const data=await service.read(reservationId)
-  res.json({ data });
+  res.status(200).json({ data });
 }
 
 module.exports = {
