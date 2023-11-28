@@ -49,7 +49,7 @@ async function checkIfOccupied(req, res, next){
 }
 
 async function tableExists(req, res, next){
-    const {tableId}=req.params
+    const {tableId} = req.params;
     const data=await service.read(tableId)
     if(data){
      res.locals.table=data;

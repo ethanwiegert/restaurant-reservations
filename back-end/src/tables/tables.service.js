@@ -10,6 +10,7 @@ function read(tableId){
     return knex("tables")
     .select("*")
     .where({table_id:tableId})
+    .first()
 }
 
 function create(table){
