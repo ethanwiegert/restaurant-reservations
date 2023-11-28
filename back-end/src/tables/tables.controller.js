@@ -23,10 +23,6 @@ async function reservationIdExists(req, res, next){
 }
 
 async function checkTableCapacity(req, res, next){
-    const {tableId}=req.params
-    const data=await service.read(tableId)
-    res.locals.table=data
-
     const { capacity } = res.locals.table;
     const { people } = res.locals.reservation;
     
@@ -36,12 +32,14 @@ async function checkTableCapacity(req, res, next){
             message: `Insufficient capacity for reservation`
           })
     }
+    else{
     return next()
+    }
 }
 
 async function checkIfOccupied(req, res, next){
-    const reservationId=req.data.reservation_id
-    if(reservationId!==null){
+    const {reservation_id}=res.local.reservation
+    if(reservation_id){
         return next({
             status:404,
             message: `Table is currently occupied`
@@ -53,13 +51,14 @@ async function checkIfOccupied(req, res, next){
 async function tableExists(req, res, next){
     const {tableId}=req.params
     const data=await service.read(tableId)
-    if(!data.table_id){
-      return next({
+    if(data){
+     res.locals.table=data;
+     return next();
+    }
+    return next({
         status:404,
         message: `No table with ID ${tableId} found`
       })
-    }
-    next()
   }
 
 function checkCapacity(req, res, next){
@@ -114,5 +113,5 @@ async function update(req, res, next){
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
     create:[hasRequiredFields, checkCapacity, checkTableName, asyncErrorBoundary(create)],
     list:[asyncErrorBoundary(list)],
-    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), asyncErrorBoundary(update)]
+    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(tableExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), asyncErrorBoundary(update)]
 };
