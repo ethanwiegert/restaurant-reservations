@@ -10,22 +10,23 @@ const updateHasRequiredFields=hasProperties(
 "reservation_id")
 
 async function reservationIdExists(req, res, next){
-    const reservationId=req.params.data.reservation_id
-    const reservation=await reservationService.read(reservationId)
-    if(!reservation.reservation_id){
-        return next({
-            status:404,
-            message: `Reservation id ${reservationId} does not exist`
-          })
+    const { reservation_id } = req.body.data;
+    const reservation=await reservationService.read(reservation_id)
+    if(reservation){
+        res.locals.reservation = reservation;
+        return next();
     }
- next()
+    return next({
+        status:404,
+        message: `Reservation id ${reservation_id} does not exist`
+      })
 }
 
 async function checkTableCapacity(req, res, next){
-    const reservationId=req.params.data.reservation_id
-    const reservation=await reservationService.read(reservationId)
-    const tableCapacity=req.params.data.capacity
-    if(reservation.people>tableCapacity){
+    const {tableId}=req.params
+    const {people}=res.locals.reservation
+    const data=await service.read(tableId)
+    if(people>data.capacity){
         return next({
             status:404,
             message: `Insufficient capacity for reservation`
