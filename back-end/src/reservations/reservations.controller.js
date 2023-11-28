@@ -35,8 +35,8 @@ const hasRequiredFields=hasProperties("first_name",
 
 async function reservationExists(req, res, next){
   const {reservationId}=req.params
-  const data=await service.read(reservationId)
-  if(!data.length){
+  res.locals.reservation=await service.read(reservationId)
+  if(!res.locals.reservation.reservation_id){
     return next({
       status:404,
       message: `No reservation with ID ${reservationId} found`
@@ -119,14 +119,13 @@ async function create(req, res, next){
   res.status(201).json({data: reservation})
 }
 
-async function read(req, res, next) {
-  const {reservationId}=req.params
-  const data=await service.read(reservationId)
-  res.status(200).json({ data });
+function read(req, res) {
+  const data = res.locals.reservation;
+  res.status(200).json( {data} );
 }
 
 module.exports = {
   list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
   create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, asyncErrorBoundary(create)],
-  read:[ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)]
+  read:[ asyncErrorBoundary(reservationExists), read]
 };

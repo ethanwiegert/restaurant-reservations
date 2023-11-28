@@ -5,10 +5,24 @@ const hasProperties=require("../errors/hasProperties.js")
 const hasRequiredFields=hasProperties("table_name",
 "capacity")
 
+const updateHasRequiredFields=hasProperties(
+"reservation_id")
+
+function reservationIdExists(req, res, next){
+    const reservationId=req.params.data.reservation_id
+    if(reservationId===null){
+        return next({
+            status:404,
+            message: `Seating requires reservation_id`
+          })
+    }
+    next()
+}
+
 async function tableExists(req, res, next){
     const {tableId}=req.params
     const data=await service.read(tableId)
-    if(!data.length){
+    if(!data){
       return next({
         status:404,
         message: `No table with ID ${tableId} found`
@@ -60,8 +74,14 @@ async function list(req, res, next){
     res.json({ data });
 }
 
+async function update(req, res, next){
+    const data=await service.update(req.body.data)
+    res.json({data})
+}
+
   module.exports={
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
     create:[hasRequiredFields, checkCapacity, checkTableName, asyncErrorBoundary(create)],
     list:[asyncErrorBoundary(list)],
+    update:[updateHasRequiredFields, reservationIdExists, asyncErrorBoundary(update)]
 };
