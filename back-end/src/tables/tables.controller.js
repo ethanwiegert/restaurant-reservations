@@ -24,15 +24,19 @@ async function reservationIdExists(req, res, next){
 
 async function checkTableCapacity(req, res, next){
     const {tableId}=req.params
-    const {people}=res.locals.reservation
     const data=await service.read(tableId)
-    if(people>data.capacity){
+    res.locals.table=data
+
+    const { capacity } = res.locals.table;
+    const { people } = res.locals.reservation;
+    
+    if(people>capacity){
         return next({
-            status:404,
+            status:400,
             message: `Insufficient capacity for reservation`
           })
     }
-    next()
+    return next()
 }
 
 async function checkIfOccupied(req, res, next){
