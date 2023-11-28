@@ -1,4 +1,5 @@
 const service=require("./tables.service.js")
+const reservationService=require("../reservations/reservations.service.js")
 const asyncErrorBoundary=require("../errors/asyncErrorBoundary")
 const hasProperties=require("../errors/hasProperties.js")
 
@@ -8,12 +9,37 @@ const hasRequiredFields=hasProperties("table_name",
 const updateHasRequiredFields=hasProperties(
 "reservation_id")
 
-function reservationIdExists(req, res, next){
+async function reservationIdExists(req, res, next){
     const reservationId=req.params.data.reservation_id
-    if(reservationId===null){
+    const reservation=await reservationService.read(reservationId)
+    if(!reservation.reservation_id){
         return next({
             status:404,
-            message: `Seating requires reservation_id`
+            message: `Reservation id ${reservationId} does not exist`
+          })
+    }
+ next()
+}
+
+async function checkTableCapacity(req, res, next){
+    const reservationId=req.params.data.reservation_id
+    const reservation=await reservationService.read(reservationId)
+    const tableCapacity=req.params.data.capacity
+    if(reservation.people>tableCapacity){
+        return next({
+            status:404,
+            message: `Insufficient capacity for reservation`
+          })
+    }
+    next()
+}
+
+async function checkIfOccupied(req, res, next){
+    const reservationId=req.data.reservation_id
+    if(reservationId!==null){
+        return next({
+            status:404,
+            message: `Table is currently occupied`
           })
     }
     next()
@@ -22,7 +48,7 @@ function reservationIdExists(req, res, next){
 async function tableExists(req, res, next){
     const {tableId}=req.params
     const data=await service.read(tableId)
-    if(!data){
+    if(!data.table_id){
       return next({
         status:404,
         message: `No table with ID ${tableId} found`
@@ -83,5 +109,5 @@ async function update(req, res, next){
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
     create:[hasRequiredFields, checkCapacity, checkTableName, asyncErrorBoundary(create)],
     list:[asyncErrorBoundary(list)],
-    update:[updateHasRequiredFields, reservationIdExists, asyncErrorBoundary(update)]
+    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), asyncErrorBoundary(update)]
 };
