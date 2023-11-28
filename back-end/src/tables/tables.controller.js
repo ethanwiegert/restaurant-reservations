@@ -41,7 +41,7 @@ async function checkIfOccupied(req, res, next){
     const {reservation_id}=res.locals.table
     if(reservation_id){
         return next({
-            status:404,
+            status:400,
             message: `Table is currently occupied`
           })
     }
@@ -105,7 +105,7 @@ async function list(req, res, next){
 }
 
 async function update(req, res, next){
-    const updatedTable=[res.locals.table, req.body.data]
+    const updatedTable={...res.locals.table, ...req.body.data}
     const data=await service.update(updatedTable)
     res.status(200).json({data})
 }
