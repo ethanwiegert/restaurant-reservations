@@ -20,11 +20,14 @@ function Dashboard({ date }) {
 
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  
   const [dateToday, setDateToday] = useState(query.get("date") || today());
+  
   const [tables, setTables]=useState([])
   const [tablesError, setTablesError]=useState(null)
   
   useEffect(loadDashboard, [dateToday]);
+  
   useEffect(loadTables, [])
 
   function loadDashboard() {
@@ -60,14 +63,6 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${previous(dateToday)}`);
   }
 
-  function handleOccupied(tables){
-    tables.forEach((table)=>{
-      if(table.reservation_id===null){
-        table.reservation_id="Free"
-      }
-      table.reservation_id="Occupied"
-    })
-  }
 
   return (
     <main>
