@@ -86,6 +86,17 @@ function checkTableName(req, res, next){
     next()
 }
 
+async function checkNotOccupied(req, res, next){
+    const {reservation_id}=res.locals.table
+    if(!reservation_id){
+        return next({
+            status:400,
+            message: `Table is currently not occupied`
+          })
+    }
+    return next()
+}
+
 async function read(req, res, next) {
     const {tableId}=req.params
     const data=await service.read(tableId)
@@ -110,9 +121,16 @@ async function update(req, res, next){
     res.status(200).json({data})
 }
 
+async function destroy(req, res, next){
+    const {tableId}=req.params
+    const data = await service.destroy(tableId)
+    res.status(200).json({data})
+}
+
   module.exports={
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
     create:[hasRequiredFields, checkCapacity, checkTableName, asyncErrorBoundary(create)],
     list:[asyncErrorBoundary(list)],
-    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(tableExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), asyncErrorBoundary(update)]
+    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(tableExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), asyncErrorBoundary(update)],
+    delete:[asyncErrorBoundary(tableExists), asyncErrorBoundary(checkNotOccupied), asyncErrorBoundary(destroy)],
 };
