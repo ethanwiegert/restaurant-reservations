@@ -16,8 +16,8 @@ function FinishTable(reserved, tableId){
         }
     }
 
-    if(reserved.length){
-        return <button id="data-table-id-finish={table.table_id}" className="btn btn-danger">Finish</button>
+    if(reserved!==null){
+        return <button id="data-table-id-finish={table.table_id}" className="btn btn-danger" onClick={handleDeckDelete}>Finish</button>
     }
 }
 

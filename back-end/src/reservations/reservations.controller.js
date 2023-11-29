@@ -107,6 +107,22 @@ function checkNotTuesday(req, res, next){
   next()
 }
 
+function checkStatus(req, res, next){
+  const {status}=req.body.data
+  if(status==="seated"){
+    return next({
+      status:400,
+      message: `status cannot be seated for new reservation`,
+    })}
+    else if(status==="finished"){ 
+      return next({
+      status:400,
+      message: `status cannot be finished for new reservation`,
+    })}
+    return next()
+  }
+
+
 async function list(req, res) {
   const date=req.query.date
  res.send({data: await service.list(date)})
@@ -126,6 +142,6 @@ function read(req, res) {
 
 module.exports = {
   list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
-  create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, asyncErrorBoundary(create)],
+  create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkStatus, asyncErrorBoundary(create)],
   read:[ asyncErrorBoundary(reservationExists), read]
 };
