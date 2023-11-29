@@ -61,13 +61,13 @@ function Dashboard({ date }) {
                 <div className="row">
                     <h5 className="col-4">{reservation.first_name} {reservation.last_name}</h5>
                     <h5 className="col-5">Time: {reservation.reservation_time} People: {reservation.people}</h5>
-                    <button className="btn btn-primary"><a href="/reservations/${reservation.reservation_id}/seat">Seat</a></button>
+                    <button href="/reservations/${reservation_id}/seat" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button>
                 </div>
             )
 
             )}
 
-            
+
 
       {JSON.stringify(reservations)}
     </main>
