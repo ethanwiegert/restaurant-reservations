@@ -4,6 +4,7 @@
 const service=require("./reservations.service.js")
 const asyncErrorBoundary=require("../errors/asyncErrorBoundary")
 const hasProperties=require("../errors/hasProperties.js")
+const { as } = require("../db/connection.js")
 
 const ValidProperties=[
   "first_name",
@@ -12,6 +13,11 @@ const ValidProperties=[
   "reservation_date",
   "reservation_time",
   "people",
+]
+
+const validStatus=[
+  "booked",
+  "seated",
 ]
 
 async function reservationForDateExists(req, res, next){
@@ -35,14 +41,15 @@ const hasRequiredFields=hasProperties("first_name",
 
 async function reservationExists(req, res, next){
   const {reservationId}=req.params
-  res.locals.reservation=await service.read(reservationId)
-  if(!res.locals.reservation.reservation_id){
-    return next({
-      status:404,
-      message: `No reservation with ID ${reservationId} found`
-    })
+  data=await service.read(reservationId)
+  if(data){
+    res.locals.reservation=data;
+    return next()
   }
-  next()
+  return next({
+    status:404,
+    message: `No reservation with ID ${reservationId} found`
+  })
 }
 
 function checkPeople(req, res, next){
@@ -107,7 +114,7 @@ function checkNotTuesday(req, res, next){
   next()
 }
 
-function checkStatus(req, res, next){
+function checkDefaultStatus(req, res, next){
   const {status}=req.body.data
   if(status==="seated"){
     return next({
@@ -122,6 +129,27 @@ function checkStatus(req, res, next){
     return next()
   }
 
+function checkValidStatus(req, res, next){
+  const {status}=res.locals.reservation
+  if(validStatus.includes(status)){
+    return next()
+  }
+  return next({
+    status:400,
+    message: `status cannot be unknown`,
+  })
+}
+
+function checkNotFinished(req, res, next){
+  const {status}=res.locals.reservation
+  if(status==="finished"){
+    return next({
+      status:400,
+      message: `finished reservations cannot change status`,
+    })
+  }
+  return next()
+}
 
 async function list(req, res) {
   const date=req.query.date
@@ -140,8 +168,15 @@ function read(req, res) {
   res.status(200).json( {data} );
 }
 
+async function update(req, res, next){
+  const updatedReservation=req.body.data
+  const data=await service.update(updatedReservation)
+  res.status(200).json({data})
+}
+
 module.exports = {
   list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
-  create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkStatus, asyncErrorBoundary(create)],
-  read:[ asyncErrorBoundary(reservationExists), read]
+  create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkDefaultStatus, asyncErrorBoundary(create)],
+  read:[ asyncErrorBoundary(reservationExists), read],
+  update:[asyncErrorBoundary(reservationExists), checkNotFinished, checkValidStatus, asyncErrorBoundary(update)],
 };
