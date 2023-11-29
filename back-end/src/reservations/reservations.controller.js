@@ -131,14 +131,17 @@ function checkDefaultStatus(req, res, next){
 
 function checkValidStatus(req, res, next){
   const {status}=res.locals.reservation
-  if(validStatus.includes(status)){
+  if(status==="seated"){
     return next()
   }
-  return next({
-    status:400,
-    message: `status cannot be unknown`,
-  })
-}
+    else if(status==="seated"){ 
+      return next()
+    }
+    return next({
+      status:400,
+      message: `status cannot be unknown`,
+    })
+  }
 
 function checkNotFinished(req, res, next){
   const {status}=res.locals.reservation
@@ -169,7 +172,7 @@ function read(req, res) {
 }
 
 async function update(req, res, next){
-  const updatedReservation=req.body.data
+  const updatedReservation={...res.locals.reservation, ...req.body.data}
   const data=await service.update(updatedReservation)
   res.status(200).json({data})
 }
