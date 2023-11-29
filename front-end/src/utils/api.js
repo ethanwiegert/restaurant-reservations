@@ -94,3 +94,13 @@ export async function listTables(signal) {
   const url = `${API_BASE_URL}/tables`;
   return await fetchJson(url, { signal }, {});
 }
+
+export async function updateTable(updatedTable, signal){
+  const url = `${API_BASE_URL}/tables/${updatedTable.id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(updatedTable),
+  };
+  return await fetchJson(url, options, updatedTable);
+}
