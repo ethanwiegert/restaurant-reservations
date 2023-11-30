@@ -20,6 +20,7 @@ const validStatus=[
 
 
 async function reservationForDateExists(req, res, next){
+  if(req.query.date){
   const date=req.query.date
   const data=await service.list(date)
   if(!data.length){
@@ -28,6 +29,7 @@ async function reservationForDateExists(req, res, next){
       message: `No reservations for the data ${date} found`
     })
   }
+}
   next()
 }
 
