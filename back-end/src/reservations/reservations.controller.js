@@ -155,6 +155,11 @@ async function list(req, res) {
  res.send({data: await service.list(date)})
 }
 
+async function seachNumber(req, res){
+  const mobileNumber=req.query.mobile_number
+  res.send({data: await service.search(mobileNumber)})
+}
+
 async function create(req, res, next){
   const reservation=req.body.data
   const { reservation_id } = await service.create(reservation);
@@ -175,6 +180,7 @@ async function update(req, res, next){
 
 module.exports = {
   list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
+  search:[asyncErrorBoundary(seachNumber)],
   create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkDefaultStatus, asyncErrorBoundary(create)],
   read:[ asyncErrorBoundary(reservationExists), read],
   update:[asyncErrorBoundary(reservationExists), checkNotFinished, checkValidStatus, asyncErrorBoundary(update)],
