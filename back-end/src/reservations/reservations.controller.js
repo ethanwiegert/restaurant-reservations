@@ -151,14 +151,17 @@ function checkNotFinished(req, res, next){
 }
 
 async function list(req, res) {
-  const date=req.query.date
- res.send({data: await service.list(date)})
+  let data;
+
+  if (req.query.date) {
+    data = await service.list(req.query.date);
+  } else {
+    data = await service.search(req.query.mobile_number);
+  }
+
+  res.json({ data });
 }
 
-async function seachNumber(req, res){
-  const mobileNumber=req.query.mobile_number
-  res.send({data: await service.search(mobileNumber)})
-}
 
 async function create(req, res, next){
   const reservation=req.body.data
@@ -180,7 +183,6 @@ async function update(req, res, next){
 
 module.exports = {
   list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
-  search:[asyncErrorBoundary(seachNumber)],
   create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkDefaultStatus, asyncErrorBoundary(create)],
   read:[ asyncErrorBoundary(reservationExists), read],
   update:[asyncErrorBoundary(reservationExists), checkNotFinished, checkValidStatus, asyncErrorBoundary(update)],
