@@ -97,6 +97,17 @@ async function checkNotOccupied(req, res, next){
     return next()
 }
 
+function checkIfSeated(req, res, next){
+    const {status}=res.locals.reservation
+    if(status==="seated"){
+        return next({
+            status:400,
+            message: `Table is already seated`
+          })
+    }
+    return next()
+  }
+
 async function read(req, res, next) {
     const {tableId}=req.params
     const data=await service.read(tableId)
@@ -116,14 +127,21 @@ async function list(req, res, next){
 }
 
 async function update(req, res, next){
+    const{reservation_id}=res.locals.reservation
+    const updatedReservation=await reservationService.update(reservation_id, "seated")
+
     const updatedTable={...res.locals.table, ...req.body.data}
     const data=await service.update(updatedTable)
     res.status(200).json({data})
 }
 
 async function destroy(req, res, next){
+    const{reservation_id}=req.body.data
+    const updatedReservation=await reservationService.update(reservation_id, "finished")
+
     const {tableId}=req.params
     const data = await service.destroy(tableId)
+
     res.status(200).json({data})
 }
 
@@ -131,6 +149,6 @@ async function destroy(req, res, next){
     read:[asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
     create:[hasRequiredFields, checkCapacity, checkTableName, asyncErrorBoundary(create)],
     list:[asyncErrorBoundary(list)],
-    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(tableExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), asyncErrorBoundary(update)],
+    update:[updateHasRequiredFields, asyncErrorBoundary(reservationIdExists), asyncErrorBoundary(tableExists), asyncErrorBoundary(checkTableCapacity), asyncErrorBoundary(checkIfOccupied), checkIfSeated, asyncErrorBoundary(update)],
     delete:[asyncErrorBoundary(tableExists), asyncErrorBoundary(checkNotOccupied), asyncErrorBoundary(destroy)],
 };

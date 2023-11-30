@@ -16,9 +16,8 @@ const ValidProperties=[
 ]
 
 const validStatus=[
-  "booked",
-  "seated",
-]
+  'booked', 'seated', 'finished', 'cancelled']
+
 
 async function reservationForDateExists(req, res, next){
   const date=req.query.date
@@ -41,7 +40,7 @@ const hasRequiredFields=hasProperties("first_name",
 
 async function reservationExists(req, res, next){
   const {reservationId}=req.params
-  data=await service.read(reservationId)
+  const data=await service.read(reservationId)
   if(data){
     res.locals.reservation=data;
     return next()
@@ -130,13 +129,10 @@ function checkDefaultStatus(req, res, next){
   }
 
 function checkValidStatus(req, res, next){
-  const {status}=res.locals.reservation
-  if(status==="seated"){
+  const {status}=req.body.data
+  if(validStatus.includes(status)){
     return next()
   }
-    else if(status==="seated"){ 
-      return next()
-    }
     return next({
       status:400,
       message: `status cannot be unknown`,
@@ -172,8 +168,8 @@ function read(req, res) {
 }
 
 async function update(req, res, next){
-  const updatedReservation={...res.locals.reservation, ...req.body.data}
-  const data=await service.update(updatedReservation)
+
+  const data=await service.update(res.locals.reservation.reservation_id, req.body.data.status)
   res.status(200).json({data})
 }
 

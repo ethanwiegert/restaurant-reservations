@@ -4,6 +4,8 @@ function list(date){
     return knex("reservations")
     .select("*")
     .where({reservation_date:date})
+    .where({status:"seated"})
+    .orWhere({status:"booked"})
     .orderBy("reservation_time")
 }
 
@@ -21,12 +23,12 @@ function read(reservationId){
     .first()
 }
 
-function update(updatedReservation){
+function update(reservation_id, status) {
     return knex("reservations")
-    .select("*")
-    .where({reservation_id:updatedReservation.reservation_id})
-    .update(updatedReservation)
-}
+    .where({ reservation_id:reservation_id })
+    .update({ status })
+    .then(() => read(reservation_id))
+};
 
 module.exports={
     list,
