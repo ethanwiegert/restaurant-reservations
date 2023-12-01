@@ -30,14 +30,15 @@ function ReservationForm(){
         event.preventDefault()
         const abortController = new AbortController();
         setFormError(null);
+        let response
         try{
-         let response=await createReservation(reservation, abortController)  
-         history.go(`/dashboard?date=${response.reservation_date}`)
+          response=await createReservation(reservation, abortController)  
+         
         } catch (e){
             console.log(e.name)
             setFormError(e)
         }
-       
+        history.push(`/dashboard?date=${response.reservation_date}`)
         return () => abortController.abort();
       }
     
