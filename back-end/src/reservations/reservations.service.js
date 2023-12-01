@@ -3,9 +3,9 @@ const knex=require("../db/connection")
 function list(date){
     return knex("reservations")
     .select("*")
-    .where({reservation_date:date})
     .where({status:"seated"})
     .orWhere({status:"booked"})
+    .where({reservation_date:date})
     .orderBy("reservation_time")
 }
 

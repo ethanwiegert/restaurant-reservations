@@ -136,7 +136,7 @@ async function update(req, res, next){
 }
 
 async function destroy(req, res, next){
-    const{reservation_id}=req.body.data
+    const{reservation_id}=res.locals.table
     const updatedReservation=await reservationService.updateStatus(reservation_id, "finished")
 
     const {tableId}=req.params
