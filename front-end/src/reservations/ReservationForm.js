@@ -5,15 +5,25 @@ import { useHistory } from "react-router-dom";
 import{createReservation} from"../utils/api"
 
 function ReservationForm(){
-
-    const [reservation, setReservation] = useState({});
+    const initialFormData = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: "",
+      };
+      
+    const [reservation, setReservation] = useState({ ...initialFormData });
     const [formError, setFormError] = useState([]);
+
+   
     
     const history=useHistory()
     
 
 
-    function handleChange(target){
+    function handleChange({target}){
         setReservation({
             ...reservation,
             [target.name]: target.value
@@ -32,13 +42,15 @@ function ReservationForm(){
         setFormError(null);
         let response
         try{
-          response=await createReservation(reservation, abortController)  
+            console.log(reservation)
+          response=await createReservation(reservation, abortController.signal)  
          
         } catch (e){
             console.log(e.name)
             setFormError(e)
         }
-        history.push(`/dashboard?date=${response.reservation_date}`)
+        console.log(response)
+        history.push(`/dashboard?date=${reservation.reservation_date}`)
         return () => abortController.abort();
       }
     
