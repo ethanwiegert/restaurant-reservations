@@ -128,7 +128,7 @@ async function list(req, res, next){
 
 async function update(req, res, next){
     const{reservation_id}=res.locals.reservation
-    const updatedReservation=await reservationService.update(reservation_id, "seated")
+    const updatedReservation=await reservationService.updateStatus(reservation_id, "seated")
 
     const updatedTable={...res.locals.table, ...req.body.data}
     const data=await service.update(updatedTable)
@@ -137,7 +137,7 @@ async function update(req, res, next){
 
 async function destroy(req, res, next){
     const{reservation_id}=req.body.data
-    const updatedReservation=await reservationService.update(reservation_id, "finished")
+    const updatedReservation=await reservationService.updateStatus(reservation_id, "finished")
 
     const {tableId}=req.params
     const data = await service.destroy(tableId)

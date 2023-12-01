@@ -177,15 +177,23 @@ function read(req, res) {
   res.status(200).json( {data} );
 }
 
-async function update(req, res, next){
-
-  const data=await service.update(res.locals.reservation.reservation_id, req.body.data.status)
+async function updateStatus(req, res, next){
+  const data=await service.updateStatus(res.locals.reservation.reservation_id, req.body.data.status)
   res.status(200).json({data})
+}
+
+async function updateReservation(req, res, next){
+  const updatedReservation=req.body.data
+  const { reservation_id } = await service.updateReservation(updatedReservation);
+  updatedReservation.reservation_id = reservation_id;
+  res.status(200).json({data: updatedReservation})
+
 }
 
 module.exports = {
   list: [asyncErrorBoundary(reservationForDateExists), asyncErrorBoundary(list)],
   create: [hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkDefaultStatus, asyncErrorBoundary(create)],
   read:[ asyncErrorBoundary(reservationExists), read],
-  update:[asyncErrorBoundary(reservationExists), checkNotFinished, checkValidStatus, asyncErrorBoundary(update)],
+  updateStatus:[asyncErrorBoundary(reservationExists), checkNotFinished, checkValidStatus, asyncErrorBoundary(updateStatus)],
+  updateReservation:[asyncErrorBoundary(reservationExists), hasRequiredFields, checkFutureDate, checkNotTuesday, checkPeople, checkTimeAndDate, checkDefaultStatus, asyncErrorBoundary(updateReservation)],
 };

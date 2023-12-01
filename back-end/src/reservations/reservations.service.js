@@ -32,17 +32,25 @@ function read(reservationId){
     .first()
 }
 
-function update(reservation_id, status) {
+function updateStatus(reservation_id, status) {
     return knex("reservations")
     .where({ reservation_id:reservation_id })
     .update({ status })
     .then(() => read(reservation_id))
 };
 
+function updateReservation(updatedReservation){
+    return knex("reservations")
+    .where({reservation_id:updatedReservation.reservation_id})
+    .update(updatedReservation)
+    .then(()=>read(updatedReservation.reservation_id))
+}
+
 module.exports={
     list,
     create,
     read,
-    update,
+    updateStatus,
     search,
+    updateReservation,
 }
