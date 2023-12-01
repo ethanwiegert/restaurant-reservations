@@ -6,7 +6,7 @@ import {today, next, previous} from "../utils/date-time"
 import useQuery from "../utils/useQuery"
 
 import CheckOccupied from "./CheckOccupied"
-import FinishTable from "./FinishTable";
+
 /**
  * Defines the dashboard page.
  * @param date
@@ -80,7 +80,7 @@ function Dashboard({ date }) {
                     <p className="col-3">{reservation.first_name} {reservation.last_name}</p>
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
-                    <button href="/reservations/${reservation_id}/seat" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button>
+                    <button id="/reservations/${reservation_id}/seat" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button>
                 </div>
             )
 
@@ -91,7 +91,7 @@ function Dashboard({ date }) {
                     <p className="col-4">{table.table_name}</p>
                     <p className="col-5">Capacity: {table.capacity}</p>
                     <div id="data-table-id-status=${table.table_id}"><CheckOccupied reserved={table.reservation_id}/></div>
-                    {/*<FinishTable reserved={table.reservation_id} tableId={table.table_id}/>*/}
+                   
                 </div>
             )
 

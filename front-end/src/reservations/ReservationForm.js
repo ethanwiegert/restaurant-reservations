@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import{createReservation} from"../utils/api"
 
 function ReservationForm(){
@@ -11,7 +11,7 @@ function ReservationForm(){
     
     const history=useHistory()
     
-    useEffect(()=>handleSubmit, [])
+    useEffect(()=>handleSubmit)
 
     function handleChange(target){
         setReservation({
@@ -31,11 +31,10 @@ function ReservationForm(){
         const abortController = new AbortController();
         setFormError(null);
         try{
-         const response= await createReservation(reservation, abortController)  
+         await createReservation(reservation, abortController)  
         } catch (e){
             console.log(e.name)
-            if(formError=[]){setFormError([e])}
-            else{formError.push(e)}
+            setFormError(e)
         }
         return () => abortController.abort();
       }
@@ -83,13 +82,7 @@ function ReservationForm(){
                 <button type="submit button" className="btn btn-success mb-2">Submit</button>
             </form>
 
-            {formError.map((error)=>(
-                <div>
-                    <h5 className="alert alert-danger">{error}</h5>
-                </div>
-            )
-
-            )}
+            <ErrorAlert error={formError} />
         </div>
     )
 }

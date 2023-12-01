@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import{createTable} from"../utils/api"
 
 function TableForm(){
@@ -11,7 +11,7 @@ function TableForm(){
     
     const history=useHistory()
     
-    useEffect(()=>handleSubmit, [])
+    useEffect(()=>handleSubmit)
 
     function handleChange(target){
         setTable({
@@ -31,12 +31,11 @@ function TableForm(){
         const abortController = new AbortController();
         setFormError(null);
         try{
-         const response= await createTable(table, abortController)  
+         await createTable(table, abortController)  
          history.push("/dashboard")
         } catch (e){
             console.log(e.name)
-            if(formError=[]){setFormError([e])}
-            else{formError.push(e)}
+            setFormError(e)
         }
         return () => abortController.abort();
       }
@@ -66,13 +65,9 @@ function TableForm(){
                 <button type="submit button" className="btn btn-success mb-2">Submit</button>
             </form>
 
-            {formError.map((error)=>(
-                <div>
-                    <h5 className="alert alert-danger">{error}</h5>
-                </div>
-            )
+            <ErrorAlert error={formError} />
 
-            )}
+            
         </div>
     )
 }

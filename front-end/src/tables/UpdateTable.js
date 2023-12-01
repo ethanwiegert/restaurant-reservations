@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listTables, updateTable } from "../utils/api";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function UpdateTable(){
     const history=useHistory()
@@ -11,7 +12,7 @@ function UpdateTable(){
 
 
     useEffect(loadTables, [])
-    useEffect(()=>handleSubmit, [updatedTable])
+    useEffect(()=>handleSubmit)
 
     function loadTables() {
         const abortController = new AbortController();
@@ -40,12 +41,11 @@ function UpdateTable(){
         const abortController = new AbortController();
         setTablesError(null);
         try{
-         const response= await updateTable(updatedTable, abortController)  
+        await updateTable(updatedTable, abortController)  
          history.push("/dashboard")
         } catch (e){
             console.log(e.name)
-            if(tablesError=[]){setTablesError([e])}
-            else{tablesError.push(e)}
+            setTablesError(e)
         }
         return () => abortController.abort();
       }
@@ -72,6 +72,7 @@ function UpdateTable(){
                 <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
                 <button type="submit button" className="btn btn-success mb-2">Submit</button>
             </form>
+            <ErrorAlert error={tablesError} />
 
           
         </div>
