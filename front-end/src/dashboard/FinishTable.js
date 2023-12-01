@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 function FinishTable(reserved, tableId){
     const history=useHistory()
 
-    useEffect(handleDeckDelete)
+   
 
     function handleDeckDelete() {
         const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")

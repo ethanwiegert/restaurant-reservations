@@ -12,7 +12,7 @@ function UpdateTable(){
 
 
     useEffect(loadTables, [])
-    useEffect(()=>handleSubmit)
+    
 
     function loadTables() {
         const abortController = new AbortController();
@@ -37,7 +37,7 @@ function UpdateTable(){
     }
 
     async function handleSubmit(event) {
-        event.preventDefault()
+     
         const abortController = new AbortController();
         setTablesError(null);
         try{

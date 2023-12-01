@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import { useHistory } from "react-router-dom";
@@ -11,7 +11,7 @@ function TableForm(){
     
     const history=useHistory()
     
-    useEffect(()=>handleSubmit)
+   
 
     function handleChange(target){
         setTable({
