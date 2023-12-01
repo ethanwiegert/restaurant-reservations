@@ -165,11 +165,9 @@ async function list(req, res) {
 }
 
 
-async function create(req, res, next){
-  const reservation=req.body.data
-  const { reservation_id } = await service.create(reservation);
-  reservation.reservation_id = reservation_id;
-  res.status(201).json({data: reservation})
+async function create(req, res) {
+  const data = await service.create(req.body.data)
+  res.status(201).json({ data })
 }
 
 function read(req, res) {

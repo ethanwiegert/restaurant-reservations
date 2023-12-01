@@ -11,9 +11,9 @@ function ReservationForm(){
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: "",
+        people: 0,
       };
-      
+
     const [reservation, setReservation] = useState({ ...initialFormData });
     const [formError, setFormError] = useState([]);
 
@@ -21,7 +21,12 @@ function ReservationForm(){
     
     const history=useHistory()
     
-
+    const handleNumber = ({ target }) => {
+        setReservation({
+          ...reservation,
+          [target.name]: Number(target.value),
+        });
+      };
 
     function handleChange({target}){
         setReservation({
@@ -90,7 +95,7 @@ function ReservationForm(){
 
                 <div className="col-md-6">
                 <label className="form-label">People</label>
-                <input id="people" name="people" type="number" value={reservation.people} onChange={handleChange} required/>
+                <input id="people" name="people" type="number" value={reservation.people} onChange={handleNumber} required/>
                 </div>
 
                 <button type="cancel" className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
