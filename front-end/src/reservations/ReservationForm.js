@@ -15,7 +15,7 @@ function ReservationForm(){
       };
 
     const [reservation, setReservation] = useState({ ...initialFormData });
-    const [formError, setFormError] = useState([]);
+    const [formError, setFormError] = useState(null);
 
    
     
@@ -49,13 +49,13 @@ function ReservationForm(){
         try{
             console.log(reservation)
           response=await createReservation(reservation, abortController.signal)  
-         
+          history.push(`/dashboard?date=${reservation.reservation_date}`)
         } catch (e){
             console.log(e.name)
             setFormError(e)
         }
         console.log(response)
-        history.push(`/dashboard?date=${reservation.reservation_date}`)
+       
         return () => abortController.abort();
       }
     
