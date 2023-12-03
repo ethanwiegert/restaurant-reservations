@@ -8,6 +8,7 @@ import NotFound from "./NotFound";
 import ReservationForm from "../reservations/ReservationForm";
 import TableForm from "../tables/TableForm";
 import UpdateTable from "../tables/UpdateTable";
+import SearchNumber from "../reservations/SearchNumber";
 /**
  * Defines all the routes for the application.
  *
@@ -35,6 +36,9 @@ function Routes() {
       </Route>
       <Route path="/reservations/:reservation_id/seat">
         <UpdateTable />
+      </Route>
+      <Route path="/search">
+        <SearchNumber />
       </Route>
       <Route>
         <NotFound />
