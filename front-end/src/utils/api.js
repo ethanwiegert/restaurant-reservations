@@ -68,6 +68,11 @@ export async function listReservations(params, signal) {
   .then(formatReservationTime);
   }
 
+  export async function readReservation(reservationId, signal) {
+    const url = `${API_BASE_URL}/reservations/${reservationId}`;
+    return await fetchJson(url, { signal }, {});
+  }
+
 export async function createReservation(reservation, signal){
   const url = `${API_BASE_URL}/reservations`;
   const options = {
@@ -114,4 +119,14 @@ export async function deleteTable(tableId, signal){
 export async function searchMobileNumber(number, signal){
   const url = `${API_BASE_URL}/reservations`;
   return await fetchJson(url, { signal }, {});
+}
+
+export async function updateReservation(reservation, signal){
+  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(reservation),
+  };
+  return await fetchJson(url, options, reservation);
 }

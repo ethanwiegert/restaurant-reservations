@@ -38,6 +38,7 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+  
   function loadTables() {
     const abortController = new AbortController();
     setReservationsError(null);
