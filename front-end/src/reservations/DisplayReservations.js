@@ -10,6 +10,7 @@ function DisplayReservations(reservations){
              <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
              <p className="col-3">Status: {reservation.status}</p>
              <button id="/reservations/${reservation_id}/seat" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button>
+             <a href="/reservations/${reservation_id}/edit"><button className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button></a>
          </div>
      )
 
@@ -17,3 +18,4 @@ function DisplayReservations(reservations){
       
    }
 }
+export default DisplayReservations
