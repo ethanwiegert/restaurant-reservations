@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import { deleteTable } from "../utils/api";
+import React from "react";
+
 import { useHistory } from "react-router-dom";
 
 function DisplayReservations(reservations){
+   const history=useHistory()
    if(reservations){
       return reservations.map((reservation)=>(
          <div className="row">

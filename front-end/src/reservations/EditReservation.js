@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 
-import { useHistory } from "react-router-dom";
-import{updateReservation} from"../utils/api"
+import { useHistory, useParams } from "react-router-dom";
+import{updateReservation, readReservation} from"../utils/api"
 
 function EditReservation(){
     const {reservationId}=useParams()
@@ -23,7 +23,7 @@ function EditReservation(){
     function readReservation() {
         const abortController = new AbortController();
         setFormError(null);
-        readReservations(reservationId, abortController.signal)
+        readReservation(reservationId, abortController.signal)
           .then(setReservation)
           .catch(setFormError);
         return () => abortController.abort();
