@@ -80,7 +80,7 @@ function ReservationForm(){
 
                 <div className="col-md-6">
                 <label className="form-label">Mobile Number</label>
-                <input id="mobile_number" name="mobile_number" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" value={reservation.mobile_number} onChange={handleChange} required/>
+                <input id="mobile_number" name="mobile_number" type="tel" value={reservation.mobile_number} onChange={handleChange} required/>
                 </div>
 
                 <div className="col-md-6">
