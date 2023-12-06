@@ -7,6 +7,7 @@ import useQuery from "../utils/useQuery"
 
 import CheckOccupied from "./CheckOccupied"
 import FinishTable from "./FinishTable";
+import SeatReservation from "./SeatReservation";
 
 /**
  * Defines the dashboard page.
@@ -82,7 +83,7 @@ function Dashboard({ date }) {
                     <p className="col-3">{reservation.first_name} {reservation.last_name}</p>
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
-                    <button href="/reservations/${reservation_id}/seat" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button>
+                    <div><SeatReservation reservation={reservation}/></div>
                     <button href="/reservations/${reservation_id}/edit" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button>
                 </div>
             )
