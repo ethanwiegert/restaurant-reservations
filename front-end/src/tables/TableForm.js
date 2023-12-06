@@ -5,15 +5,24 @@ import { useHistory } from "react-router-dom";
 import{createTable} from"../utils/api"
 
 function TableForm(){
+    const initialFormData = {
+        table_name: "",
+        capacity: 0,
+      };
 
-    const [table, setTable] = useState({});
-    const [formError, setFormError] = useState([]);
+    const [table, setTable] = useState({ ...initialFormData });
+    const [formError, setFormError] = useState(null);
     
     const history=useHistory()
-    
-   
 
-    function handleChange(target){
+    const handleNumber = ({ target }) => {
+        setTable({
+          ...table,
+          [target.name]: Number(target.value),
+        });
+      };
+
+    function handleChange({target}){
         setTable({
             ...table,
             [target.name]: target.value
@@ -30,8 +39,9 @@ function TableForm(){
         event.preventDefault()
         const abortController = new AbortController();
         setFormError(null);
+        console.log(table)
         try{
-         await createTable(table, abortController)  
+         await createTable(table, abortController.signal)  
          history.push("/dashboard")
         } catch (e){
             console.log(e.name)
@@ -51,12 +61,12 @@ function TableForm(){
             <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                 <label className="form-label">Table Name</label>
-                <input id="table_name" name="table_name" type="text" onChange={handleChange} minLength="2" required/>
+                <input id="table_name" name="table_name" type="text" value={table.table_name} onChange={handleChange}  minLength="2" required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Capacity</label>
-                <input id="capacity" name="capacity" type="number" onChange={handleChange} min="1" required/>
+                <input id="capacity" name="capacity" type="number" value={table.capacity} onChange={handleNumber}  min="1" required/>
                 </div>
 
                 
