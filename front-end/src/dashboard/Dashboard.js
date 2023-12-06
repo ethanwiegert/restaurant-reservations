@@ -6,6 +6,7 @@ import {today, next, previous} from "../utils/date-time"
 import useQuery from "../utils/useQuery"
 
 import CheckOccupied from "./CheckOccupied"
+import FinishTable from "./FinishTable";
 
 /**
  * Defines the dashboard page.
@@ -93,6 +94,7 @@ function Dashboard({ date }) {
                     <p className="col-4">{table.table_name}</p>
                     <p className="col-5">Capacity: {table.capacity}</p>
                     <div id="data-table-id-status=${table.table_id}"><CheckOccupied reserved={table.reservation_id}/></div>
+                    <div id="data-table-id-finish={table.table_id}"><FinishTable reserved={table.reservation_id} tableId={table.table_id}/></div>
                    
                 </div>
             )
