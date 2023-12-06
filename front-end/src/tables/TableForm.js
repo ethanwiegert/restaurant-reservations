@@ -72,7 +72,7 @@ function TableForm(){
                 
 
                 <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
-                <button type="submit button" className="btn btn-success mb-2">Submit</button>
+                <button type="submit" className="btn btn-success mb-2">Submit</button>
             </form>
 
             <ErrorAlert error={formError} />
