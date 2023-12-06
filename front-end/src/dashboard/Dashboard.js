@@ -84,7 +84,7 @@ function Dashboard({ date }) {
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
                     <div><SeatReservation reservation={reservation}/></div>
-                    <button href="/reservations/${reservation_id}/edit" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button>
+                    <button href="/reservations/${reservation.reservation_id}/edit" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button>
                 </div>
             )
 
