@@ -61,12 +61,12 @@ function TableForm(){
             <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                 <label className="form-label">Table Name</label>
-                <input id="table_name" name="table_name" type="text" value={table.table_name} onChange={handleChange}  minLength="2" required/>
+                <input id="table_name" name="table_name" type="text" value={table.table_name} onChange={handleChange} required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Capacity</label>
-                <input id="capacity" name="capacity" type="number" value={table.capacity} onChange={handleNumber}  min="1" required/>
+                <input id="capacity" name="capacity" type="number" value={table.capacity} onChange={handleNumber} required/>
                 </div>
 
                 
