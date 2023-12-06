@@ -102,10 +102,11 @@ export async function listTables(signal) {
 
 export async function updateTable(updatedTable, signal){
   const url = `${API_BASE_URL}/tables/${updatedTable.id}/seat`;
+  const reservationId=updatedTable.reservation_id
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify(updatedTable),
+    body: JSON.stringify({ data: { reservation_id: {reservationId} } }),
   };
   return await fetchJson(url, options, updatedTable);
 }

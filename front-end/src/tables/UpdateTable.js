@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { listTables, updateTable } from "../utils/api";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function UpdateTable(){
+    const {reservationId}=useParams()
+
+    const initialData = {
+        table_name: "",
+        reservation_id: {reservationId},
+        capacity: 0,
+      };
+
     const history=useHistory()
+    
 
     const [tables, setTables]=useState([])
     const [tablesError, setTablesError]=useState(null)
-    const [updatedTable, setUpdatedTable]=useState([])
+    const [updatedTable, setUpdatedTable]=useState({...initialData})
 
 
     useEffect(loadTables, [])
@@ -41,7 +50,7 @@ function UpdateTable(){
         const abortController = new AbortController();
         setTablesError(null);
         try{
-        await updateTable(updatedTable, abortController)  
+        await updateTable(updatedTable, abortController.signal)  
          history.push("/dashboard")
         } catch (e){
             console.log(e.name)
@@ -69,8 +78,8 @@ function UpdateTable(){
                     </select>
                 </div>
 
-                <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
-                <button type="submit button" className="btn btn-success mb-2">Submit</button>
+                <button type="cancel" className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
+                <button type="submit" className="btn btn-success mb-2">Submit</button>
             </form>
             <ErrorAlert error={tablesError} />
 
