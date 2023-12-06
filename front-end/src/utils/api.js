@@ -101,7 +101,7 @@ export async function listTables(signal) {
 }
 
 export async function updateTable(updatedTable, signal){
-  const url = `${API_BASE_URL}/tables/${updatedTable.id}/seat`;
+  const url = `${API_BASE_URL}/tables/${updatedTable.table_id}/seat`;
   const reservationId=updatedTable.reservation_id
   const options = {
     method: "PUT",

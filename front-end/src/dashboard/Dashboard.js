@@ -77,19 +77,19 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <h4>Reservations</h4>
       {reservations.map((reservation)=>(
-                <div className="row">
+                <div className="row" key={reservation.reservation_id}>
                     <p className="col-3">{reservation.first_name} {reservation.last_name}</p>
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
-                    <a href="/reservations/${reservation_id}/seat"><button className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button></a>
-                    <a href="/reservations/${reservation_id}/edit"><button className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button></a>
+                    <button href="/reservations/${reservation_id}/seat" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button>
+                    <button href="/reservations/${reservation_id}/edit" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button>
                 </div>
             )
 
             )}
       <h4>Tables</h4>
       {tables.map((table)=>(
-                <div className="row">
+                <div className="row" key={table.table_id}>
                     <p className="col-4">{table.table_name}</p>
                     <p className="col-5">Capacity: {table.capacity}</p>
                     <div id="data-table-id-status=${table.table_id}"><CheckOccupied reserved={table.reservation_id}/></div>
