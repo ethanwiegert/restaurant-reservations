@@ -62,12 +62,7 @@ function UpdateTable(){
         seatReservationAtTable();
         return () => abortController.abort();
         };
-    
-    /*
-    Features left to add:
-    submitting saves, sends to "/dashboard"
-    display error messages from API(ErrorAlert?)
-    */
+
     
     return (
         <div>
