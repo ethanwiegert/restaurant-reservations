@@ -72,7 +72,7 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
     if(deletePromt) {
-    deleteTable({ data: table }, abortController.signal)
+    deleteTable(table.table_id, abortController.signal)
     .then((history.push(`/`)))
     .then(window.location.reload()) 
     .catch((e)=>setFinishTableError(e))

@@ -113,11 +113,10 @@ export async function updateTable(data, signal) {
   return await fetchJson(url, options, {});
 }
 
-export async function deleteTable(data, signal){
-  const url = `${API_BASE_URL}/tables/${data.data.table_id}/seat`;
-  const options = { method: "DELETE", signal };
-  return await fetchJson(url, options);
-}
+export async function deleteTable(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  return await fetchJson(url, { headers, signal, method: "DELETE" }, []);
+  }
 
 export async function searchMobileNumber(number, signal){
   const url = `${API_BASE_URL}/reservations`;
