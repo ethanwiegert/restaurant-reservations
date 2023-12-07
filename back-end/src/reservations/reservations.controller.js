@@ -100,7 +100,7 @@ function checkFutureDate(req, res, next){
   const date=req.body.data.reservation_date
   let today=Date.now()
   if(today>Date.parse(date)){
-    return next({ status: 400, message: 'reservation_date cannot be a future date' });
+    return next({ status: 400, message: 'reservation_date must be a future date' });
   }
   next()
 }
