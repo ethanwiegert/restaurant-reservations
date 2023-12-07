@@ -69,9 +69,10 @@ function Dashboard({ date }) {
 
   function handleFinish(table) {
     setFinishTableError(null)
+    const abortController = new AbortController();
     const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
     if(deletePromt) {
-    deleteTable(table)
+    deleteTable({ data: table }, abortController.signal)
     .then((history.push(`/`)))
     .then(window.location.reload()) 
     .catch((e)=>setFinishTableError(e))
@@ -111,7 +112,7 @@ function Dashboard({ date }) {
                     <p className="col-5">Capacity: {table.capacity}</p>
                     {table.reservation_id === null ? <p>Free</p> : <p>Occupied</p>}
                     {table.reservation_id !== null && (
-                    <button type="button" className="btn btn-primary" data-table-id-finish={table.table_id} onClick={() => { window.confirm( "Is this table ready to seat new guests? This cannot be undone." ) && handleFinish(table.table_id);}}>Finish</button>)}
+                    <button type="button" className="btn btn-primary ml-4" data-table-id-finish={table.table_id} onClick={() => { window.confirm( "Is this table ready to seat new guests? This cannot be undone." ) && handleFinish(table.table_id);}}>Finish</button>)}
                     </div>
                     ))}
                    
