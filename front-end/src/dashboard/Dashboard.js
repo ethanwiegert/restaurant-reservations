@@ -6,7 +6,6 @@ import {today, next, previous} from "../utils/date-time"
 import useQuery from "../utils/useQuery"
 
 
-import FinishTable from "./FinishTable";
 
 
 /**
