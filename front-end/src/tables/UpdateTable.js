@@ -3,13 +3,14 @@ import { listTables, updateTable } from "../utils/api";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 
+
 function UpdateTable(){
-    const {reservationId}=useParams()
+    let {reservation_id}=useParams()
+    reservation_id=Number(reservation_id)
 
     const initialData = {
-        table_name: "",
-        reservation_id: {reservationId},
-        capacity: 0,
+        table_id: 0,
+        reservation_id,
       };
 
     const history=useHistory()
@@ -34,9 +35,10 @@ function UpdateTable(){
 
 
     function handleChange(target){
+        console.log(updatedTable)
         setUpdatedTable({
             ...updatedTable,
-            [target.name]: target.value
+            table_id: target.key
         })
     }
 
@@ -50,8 +52,9 @@ function UpdateTable(){
         const abortController = new AbortController();
         setTablesError(null);
         try{
+            console.log(updatedTable)
         await updateTable(updatedTable, abortController.signal)  
-         history.push("/dashboard")
+        
         } catch (e){
             console.log(e.name)
             setTablesError(e)
@@ -73,7 +76,11 @@ function UpdateTable(){
                 <label className="form-label">Table Name</label>
                 <select id="table_id" name="table_id" onChange={handleChange} required>
                 {tables.map((table)=>{
-                         return <option value="table">{table.table_name} - {table.capacity}</option>
+                         return (
+                  
+                         <option key={table.table_id} value="table">{table.table_name} - {table.capacity}</option>
+                   
+                         )
                     })}
                     </select>
                 </div>
