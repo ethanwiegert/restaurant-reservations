@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, deleteTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {today, next, previous} from "../utils/date-time"
 import useQuery from "../utils/useQuery"
 
-import CheckOccupied from "./CheckOccupied"
+
 import FinishTable from "./FinishTable";
-import SeatReservation from "./SeatReservation";
+
 
 /**
  * Defines the dashboard page.
@@ -27,6 +27,8 @@ function Dashboard({ date }) {
   
   const [tables, setTables]=useState([])
   const [tablesError, setTablesError]=useState(null)
+
+  const [finishTableError, setFinishTableError] = useState(null)
   
   useEffect(loadDashboard, [dateToday]);
   
@@ -66,6 +68,17 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${previous(dateToday)}`);
   }
 
+  function handleFinish(tableId) {
+    setFinishTableError(null)
+    const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
+    if(deletePromt) {
+    deleteTable(tableId)
+    .then((history.push(`/`)))
+    .then(window.location.reload()) 
+    .catch((e)=>setFinishTableError(e))
+    }
+}
+
 
   return (
     <main>
@@ -83,8 +96,10 @@ function Dashboard({ date }) {
                     <p className="col-3">{reservation.first_name} {reservation.last_name}</p>
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
-                    <div><SeatReservation reservation={reservation}/></div>
-                    <button href="/reservations/${reservation.reservation_id}/edit" className="btn btn-primary" onClick={()=>history.push(`/reservations/${reservation.reservation_id}/edit`)}>Edit</button>
+                    {reservation.status === "seated" ? null : (
+                    <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
+                    )}
+                    <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</a>
                 </div>
             )
 
@@ -94,8 +109,17 @@ function Dashboard({ date }) {
                 <div className="row" key={table.table_id}>
                     <p className="col-4">{table.table_name}</p>
                     <p className="col-5">Capacity: {table.capacity}</p>
-                    <div id="data-table-id-status=${table.table_id}"><CheckOccupied reserved={table.reservation_id}/></div>
-                    <div id="data-table-id-finish={table.table_id}"><FinishTable reserved={table.reservation_id} tableId={table.table_id}/></div>
+                    {table.reservation_id !== null ? <p>Occupied</p> : (
+                    <p>Free</p>
+                    )}
+                    {table.reservation_id !== null ? 
+                    <div>
+                    <button id="data-table-id-finish={table.table_id}" className="btn btn-danger" onClick={handleFinish(table.table_id)}>Finish</button> 
+                    <ErrorAlert error={finishTableError} />
+                    </div>
+                    : (
+                     null
+                    )}
                    
                 </div>
             )
