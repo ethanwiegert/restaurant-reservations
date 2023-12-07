@@ -74,13 +74,7 @@ function UpdateTable(){
         <form className="row" id="seatReservationForm">
         <div className="col-md-6">
         <label className="form-label m-2">Table Name</label>
-        <select
-        id="table_id"
-        name="table_id"
-        onChange={handleChange}
-        required
-        value={updatedTable.table_id}
-        >
+        <select id="table_id" name="table_id" onChange={handleChange} required value={updatedTable.table_id}>
         <option defaultValue>Open Tables</option>
         {tables.map(
         (table) =>
@@ -93,21 +87,8 @@ function UpdateTable(){
         </select>
         </div>
         </form>
-        <button
-        type="cancel"
-        className="btn btn-secondary m-2"
-        onClick={handleCancel}
-        >
-        Cancel
-        </button>
-        <button
-        form="seatReservationForm"
-        type="submit"
-        className="btn btn-primary m-2"
-        onClick={handleSubmit}
-        >
-        Submit
-        </button>
+        <button type="cancel" className="btn btn-secondary m-2" onClick={handleCancel}>Cancel</button>
+        <button form="seatReservationForm" type="submit" className="btn btn-primary m-2" onClick={handleSubmit}>Submit</button>
         <ErrorAlert error={tablesError} />
         </div>
         );
