@@ -9,8 +9,8 @@ function UpdateTable(){
     reservation_id=Number(reservation_id)
 
     const initialData = {
-        table_id: 0,
         reservation_id,
+        table_id: 0,
       };
 
     const history=useHistory()
@@ -34,33 +34,34 @@ function UpdateTable(){
       }
 
 
-    function handleChange(target){
-        console.log(updatedTable)
+      const handleChange = ({ target }) => {
+        console.log(updatedTable);
+        let value = target.value;
         setUpdatedTable({
-            ...updatedTable,
-            table_id: target.key
-        })
-    }
+        ...updatedTable,
+        [target.name]: Number(value),
+        });
+        };
 
     function handleCancel(event){
         event.preventDefault()
         history.goBack()
     }
 
-    async function handleSubmit(event) {
-     
+    const handleSubmit = (event) => {
+        event.preventDefault();
         const abortController = new AbortController();
-        setTablesError(null);
-        try{
-            console.log(updatedTable)
-        await updateTable(updatedTable, abortController.signal)  
-        
-        } catch (e){
-            console.log(e.name)
-            setTablesError(e)
+        async function seatReservationAtTable() {
+        try {
+        await updateTable({ data: updatedTable }, abortController.signal);
+        history.push(`/dashboard`);
+        } catch (error) {
+        setTablesError(error);
         }
+        }
+        seatReservationAtTable();
         return () => abortController.abort();
-      }
+        };
     
     /*
     Features left to add:
@@ -68,31 +69,48 @@ function UpdateTable(){
     display error messages from API(ErrorAlert?)
     */
     
-    return(
+    return (
         <div>
-            <form className="row" onSubmit={handleSubmit}>
-                
-                <div className="col-md-6">
-                <label className="form-label">Table Name</label>
-                <select id="table_id" name="table_id" onChange={handleChange} required>
-                {tables.map((table)=>{
-                         return (
-                  
-                         <option key={table.table_id} value="table">{table.table_name} - {table.capacity}</option>
-                   
-                         )
-                    })}
-                    </select>
-                </div>
-
-                <button type="cancel" className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
-                <button type="submit" className="btn btn-success mb-2">Submit</button>
-            </form>
-            <ErrorAlert error={tablesError} />
-
-          
+        <form className="row" id="seatReservationForm">
+        <div className="col-md-6">
+        <label className="form-label m-2">Table Name</label>
+        <select
+        id="table_id"
+        name="table_id"
+        onChange={handleChange}
+        required
+        value={updatedTable.table_id}
+        >
+        <option defaultValue>Open Tables</option>
+        {tables.map(
+        (table) =>
+        table.reservation_id === null && (
+        <option key={table.table_id} value={table.table_id}>
+        {table.table_name} - {table.capacity}
+        </option>
+        )
+        )}
+        </select>
         </div>
-    )
+        </form>
+        <button
+        type="cancel"
+        className="btn btn-secondary m-2"
+        onClick={handleCancel}
+        >
+        Cancel
+        </button>
+        <button
+        form="seatReservationForm"
+        type="submit"
+        className="btn btn-primary m-2"
+        onClick={handleSubmit}
+        >
+        Submit
+        </button>
+        <ErrorAlert error={tablesError} />
+        </div>
+        );
 }
 
 export default UpdateTable

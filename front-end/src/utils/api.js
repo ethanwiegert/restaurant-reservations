@@ -100,20 +100,27 @@ export async function listTables(signal) {
   return await fetchJson(url, { signal }, {});
 }
 
-export async function updateTable(updatedTable, signal){
-  const url = `${API_BASE_URL}/tables/${updatedTable.table_id}/seat`;
-  const reservation_id=updatedTable.reservation_id
+export async function updateTable(data, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${data.data.table_id}/seat`);
+
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: { reservation_id: {reservation_id} } }),
+    body: JSON.stringify(data),
+    signal,
   };
-  return await fetchJson(url, options, updatedTable);
+
+  return await fetchJson(url, options, {});
 }
 
-export async function deleteTable(tableId, signal){
-  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
-  const options = { method: "DELETE", signal };
+export async function deleteTable(table, signal){
+  const url = `${API_BASE_URL}/tables/${table.tableId}/seat`;
+  const reservation_id=table.reservation_id
+  const options = {
+    method: "DELETE",
+    signal,
+    body: JSON.stringify({ data: {reservation_id} }),
+  };
   return await fetchJson(url, options);
 }
 

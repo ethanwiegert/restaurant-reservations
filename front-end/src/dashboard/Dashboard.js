@@ -67,11 +67,11 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${previous(dateToday)}`);
   }
 
-  function handleFinish(tableId) {
+  function handleFinish(table) {
     setFinishTableError(null)
     const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
     if(deletePromt) {
-    deleteTable(tableId)
+    deleteTable(table)
     .then((history.push(`/`)))
     .then(window.location.reload()) 
     .catch((e)=>setFinishTableError(e))
@@ -103,27 +103,22 @@ function Dashboard({ date }) {
             )
 
             )}
+    <div>
       <h4>Tables</h4>
-      {tables.map((table)=>(
+      {tables.map((table) => (
                 <div className="row" key={table.table_id}>
                     <p className="col-4">{table.table_name}</p>
                     <p className="col-5">Capacity: {table.capacity}</p>
-                    {table.reservation_id !== null ? <p>Occupied</p> : (
-                    <p>Free</p>
-                    )}
-                    {table.reservation_id !== null ? 
-                    <div>
-                    <button id="data-table-id-finish={table.table_id}" className="btn btn-danger" onClick={handleFinish(table.table_id)}>Finish</button> 
-                    <ErrorAlert error={finishTableError} />
+                    {table.reservation_id === null ? <p>Free</p> : <p>Occupied</p>}
+                    {table.reservation_id !== null && (
+                    <button type="button" className="btn btn-primary" data-table-id-finish={table.table_id} onClick={() => { window.confirm( "Is this table ready to seat new guests? This cannot be undone." ) && handleFinish(table.table_id);}}>Finish</button>)}
                     </div>
-                    : (
-                     null
-                    )}
+                    ))}
                    
-                </div>
-            )
+    </div>
+            
 
-            )}
+            
 
       <ErrorAlert error={tablesError} />
 
