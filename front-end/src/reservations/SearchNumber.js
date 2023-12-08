@@ -17,7 +17,7 @@ function SearchNumber(){
     
     const history=useHistory()
     
-    useEffect(loadDashboard, [number]);
+    useEffect(loadDashboard, []);
    
     function loadDashboard() {
         const abortController = new AbortController();
@@ -28,9 +28,8 @@ function SearchNumber(){
         return () => abortController.abort();
       }
 
-    function handleChange(target){
+    function handleChange({target}){
     setNumber(target.value)
-    console.log(number)
     }
 
    function handleCancel(event){
@@ -55,15 +54,15 @@ function SearchNumber(){
     
     return(
         <div>
-            <form className="row">
+            <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                 <label className="form-label">Mobile Number</label>
                 <input id="mobile_number" name="mobile_number" type="tel" value={number} onChange={handleChange} required/>
                 </div>
-
+                <button type="cancel" className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
+                <button type="submit" className="btn btn-success mb-2">Find</button>
             </form>
-            <button type="cancel" className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
-            <button type="submit" className="btn btn-success mb-2" onClick={handleSubmit}>Find</button>
+           
 
             
             <h4>Reservations</h4>
