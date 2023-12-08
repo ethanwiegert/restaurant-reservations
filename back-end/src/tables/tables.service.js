@@ -27,10 +27,16 @@ function update(updatedTable){
     .update(updatedTable)
 }
 
-function destroy(tableId){
-    return knex("tables")
-    .where({table_id:tableId})
-    .del()
+async function destroy(table_id){
+    const trx = await knex.transaction();
+    let updatedTable = {};
+    return trx("tables")
+        .where({table_id})
+        .update({reservation_id:null}, "*")
+        .then((results)=>(updatedTable = results[0]))
+        .then(trx.commit)
+        .then(()=>updatedTable)
+        .catch(trx.rollback)
 }
 
 
