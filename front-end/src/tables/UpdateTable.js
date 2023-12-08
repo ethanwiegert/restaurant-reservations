@@ -35,12 +35,13 @@ function UpdateTable(){
 
 
       const handleChange = ({ target }) => {
-        console.log(updatedTable);
+       
         let value = target.value;
         setUpdatedTable({
         ...updatedTable,
         [target.name]: Number(value),
         });
+        
         };
 
     function handleCancel(event){
