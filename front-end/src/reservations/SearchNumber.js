@@ -7,6 +7,7 @@ import useQuery from "../utils/useQuery"
 
 
 function SearchNumber(){
+    const history=useHistory()
     const query = useQuery()
 
 
@@ -15,34 +16,37 @@ function SearchNumber(){
     const [formError, setFormError] = useState(null);
     const [reservationError, setReservationsError]=useState(null)
     
-    const history=useHistory()
+    
     
     useEffect(loadDashboard, []);
    
     function loadDashboard() {
         const abortController = new AbortController();
         setReservationsError(null);
+        if (number) {
         listReservations({ mobile_number: number }, abortController.signal)
-          .then(setReservations)
-          .catch(setReservationsError);
+        .then(setReservations)
+        .catch(setReservationsError);
+        }
         return () => abortController.abort();
-      }
+        }
 
-    function handleChange({target}){
-    setNumber(target.value)
-    }
-
-   function handleCancel(event){
+      function handleCancel(event){
         event.preventDefault()
         history.goBack()
     }
 
-    async function handleSubmit(event) {
+      function handleChange({target}){
+        setNumber(target.value)
+        }
+    
+     async function handleSubmit(event) {
         event.preventDefault()
         const abortController = new AbortController();
         setFormError(null);
         try{
         history.push(`/search?mobile_number=${number}`)
+        await  loadDashboard()
         } catch (e){
             console.log(e.name)
             setFormError(e)
@@ -81,7 +85,8 @@ function SearchNumber(){
             )}
     <div>
     <ErrorAlert error={reservationError} />
-            <ErrorAlert error={formError} />
+    <ErrorAlert error={formError} />
+          
 
             
         </div>

@@ -5,7 +5,9 @@ import { useHistory, useParams } from "react-router-dom";
 import{updateReservation, readReservation} from"../utils/api"
 
 function EditReservation(){
+    const history=useHistory()
     const {reservationId}=useParams()
+
     const initialFormData = {
         first_name: "",
         last_name: "",
@@ -18,18 +20,23 @@ function EditReservation(){
     const [reservation, setReservation] = useState({ ...initialFormData });
     const [formError, setFormError] = useState(null);
 
-    useEffect(readReservation, [])
+    useEffect(readReservation, [reservationId])
 
-    function readReservation() {
+    async function readReservation() {
         const abortController = new AbortController();
-        setFormError(null);
-        readReservation(reservationId, abortController.signal)
-          .then(setReservation)
-          .catch(setFormError);
-        return () => abortController.abort();
+        setFormError(null)
+        try {
+          const response = await readReservation(reservationId, abortController.signal);
+          setReservation(response);
+        } catch (e) {
+          setFormError(e)
+        }
+        return () => {
+          abortController.abort();
+        };
       }
     
-    const history=useHistory()
+
     
     const handleNumber = ({ target }) => {
         setReservation({
@@ -55,24 +62,27 @@ function EditReservation(){
         event.preventDefault()
         const abortController = new AbortController();
         setFormError(null);
-        let response
         try{
-          response=await updateReservation(reservation, abortController.signal)  
+          let response=await updateReservation(reservation, abortController.signal)  
           history.push(`/dashboard?date=${reservation.reservation_date}`)
         } catch (e){
-          
-            setFormError(e)
+          setFormError(e)
         }
-      
-       
         return () => abortController.abort();
       }
-    
-    /*
-    Features left to add:
-    submitting saves, sends to "/dashboard"
-    display error messages from API(ErrorAlert?)
-    */
+     
+
+      /*const placeHolders = {
+        first_name: `${reservation.first_name}`,
+        last_name: `${reservation.last_name}`,
+        mobile_number: `${reservation.mobile_number}`,
+        reservation_date: `${reservation.reservation_date}`,
+        reservation_time: `${reservation.reservation_time}`,
+        people: `${reservation.people}`,
+      };*/
+   
+
+ 
     
     return(
         <div>
@@ -84,12 +94,12 @@ function EditReservation(){
 
                 <div className="col-md-6">
                 <label className="form-label">Last Name</label>
-                <input id="last_name" name="last_name" type="text" value={reservation.last_name} onChange={handleChange} required/>
+                <input id="last_name" name="last_name" type="text" value={reservation.last_name} onChange={handleChange}  required/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Mobile Number</label>
-                <input id="mobile_number" name="mobile_number" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" value={reservation.mobile_number} onChange={handleChange} required/>
+                <input id="mobile_number" name="mobile_number" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" value={reservation.mobile_number} onChange={handleChange}  required/>
                 </div>
 
                 <div className="col-md-6">
@@ -104,7 +114,7 @@ function EditReservation(){
 
                 <div className="col-md-6">
                 <label className="form-label">People</label>
-                <input id="people" name="people" type="number" value={reservation.people} onChange={handleNumber} required/>
+                <input id="people" name="people" type="number" value={reservation.people} onChange={handleNumber}  required/>
                 </div>
 
                 <button type="cancel" className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
