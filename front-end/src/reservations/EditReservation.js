@@ -6,9 +6,11 @@ import{updateReservation, readReservation} from"../utils/api"
 
 function EditReservation(){
     const history=useHistory()
-    const {reservationId}=useParams()
+    let {reservation_id}=useParams()
+    reservation_id=Number(reservation_id)
 
     const initialFormData = {
+        reservation_id,
         first_name: "",
         last_name: "",
         mobile_number: "",
@@ -20,13 +22,13 @@ function EditReservation(){
     const [updatedReservation, setUpdatedReservation] = useState({ ...initialFormData });
     const [formError, setFormError] = useState(null);
 
-    useEffect(readReservation, [reservationId])
+    useEffect(readReservation, [reservation_id])
 
     async function readReservation() {
         const abortController = new AbortController();
         setFormError(null)
         try {
-          const response = await readReservation(reservationId, abortController.signal);
+          const response = await readReservation(reservation_id, abortController.signal);
           setReservation(response);
         } catch (e) {
           setFormError(e)
@@ -63,8 +65,8 @@ function EditReservation(){
         const abortController = new AbortController();
         setFormError(null);
         try{
-          let response=await updateReservation(updatedReservation, abortController.signal)  
-          history.push(`/dashboard?date=${updatedReservation.reservation_date}`)
+          await updateReservation(updatedReservation, abortController.signal)  
+          history.goBack()
         } catch (e){
           setFormError(e)
         }

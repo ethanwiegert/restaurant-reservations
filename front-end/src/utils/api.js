@@ -124,7 +124,7 @@ export async function searchMobileNumber(number, signal){
 }
 
 export async function updateReservation(reservation, signal){
-  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}/seat`;
+  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}`;
   const options = {
     method: "PUT",
     headers,
