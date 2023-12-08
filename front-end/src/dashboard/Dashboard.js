@@ -31,7 +31,7 @@ function Dashboard({ date }) {
   
   useEffect(loadDashboard, [dateToday]);
   
-  useEffect(loadTables, [])
+  useEffect(loadTables, [dateToday])
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -73,8 +73,8 @@ function Dashboard({ date }) {
     const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
     if(deletePromt) {
     deleteTable(id, abortController.signal)
-    /*.then((history.push(`/`)))
-    .then(window.location.reload()) */
+    //.then((history.push(`/`)))
+    .then(window.location.reload()) 
     //.catch((e)=>setFinishTableError(e))
     }
 }
@@ -97,9 +97,9 @@ function Dashboard({ date }) {
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
                     {reservation.status === "seated" ? null : (
-                    <link href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</link>
+                    <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
                     )}
-                    <link href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</link>
+                    <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</a>
                 </div>
             )
 
