@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { listReservations, listTables, deleteTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {today, next, previous} from "../utils/date-time"
@@ -97,9 +97,9 @@ function Dashboard({ date }) {
                     <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
                     <p className="col-3">Status: {reservation.status}</p>
                     {reservation.status === "seated" ? null : (
-                    <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
+                    <Link href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</Link>
                     )}
-                    <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</a>
+                    <Link href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</Link>
                 </div>
             )
 
