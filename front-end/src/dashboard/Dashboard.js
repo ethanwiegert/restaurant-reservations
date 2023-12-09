@@ -79,6 +79,15 @@ function Dashboard({ date }) {
     }
 }
 
+function handleCancel(reservation){
+  setReservationsError(null)
+  const abortController = new AbortController();
+  const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
+    if(deletePromt) {
+    deleteTable(reservation.status, abortController.signal)
+}
+}
+
 
   return (
     <main>
@@ -100,6 +109,7 @@ function Dashboard({ date }) {
                     <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
                     )}
                     <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</a>
+                    <a className="btn btn-primary">Cancel</a>
                 </div>
             )
 
