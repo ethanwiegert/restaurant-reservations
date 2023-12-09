@@ -31,7 +31,7 @@ function Dashboard({ date }) {
   
   useEffect(loadDashboard, [dateToday]);
   
-  useEffect(loadTables, [dateToday])
+  useEffect(loadTables, [])
 
   function loadDashboard() {
     const abortController = new AbortController();

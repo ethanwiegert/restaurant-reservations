@@ -3,7 +3,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 import { useHistory, useParams } from "react-router-dom";
 import {updateReservation, readReservation} from"../utils/api"
-import formatReservationDate from "../utils/format-reservation-date"
+import {formatAsDate} from "../utils/date-time"
 
 function EditReservation(){
     const history=useHistory()
@@ -20,8 +20,8 @@ function EditReservation(){
         setFormError(null)
         try {
           const response = await readReservation(reservation_id, abortController.signal);
+          response.reservation_date = formatAsDate(response.reservation_date)
           setReservation(response);
-          formatReservationDate(reservation)
           console.log("read reservation", reservation)
         } catch (e) {
           setFormError(e)
@@ -59,7 +59,7 @@ function EditReservation(){
         setFormError(null);
         try{
           await updateReservation(reservation, abortController.signal)  
-          history.goBack()
+          history.push(`/dashboard?date=${reservation.reservation_date}`)
         } catch (e){
           setFormError(e)
         }
