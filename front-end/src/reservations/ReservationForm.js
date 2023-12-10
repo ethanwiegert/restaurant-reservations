@@ -22,7 +22,7 @@ function ReservationForm(){
         <div>
             <FormComponent feature={feature} reservation={reservation} setReservation={setReservation} formError={formError} setFormError={setFormError} />
 
-            <ErrorAlert error={formError} />
+      
         </div>
     )
 }
