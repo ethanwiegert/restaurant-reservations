@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { listReservations, listTables, deleteTable } from "../utils/api";
+import { listReservations, listTables, deleteTable, cancelReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {today, next, previous} from "../utils/date-time"
 import useQuery from "../utils/useQuery"
@@ -79,12 +79,13 @@ function Dashboard({ date }) {
     }
 }
 
-function handleCancel(reservation){
+function handleCancel(id){
   setReservationsError(null)
   const abortController = new AbortController();
-  const deletePromt = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
-    if(deletePromt) {
-    deleteTable(reservation.status, abortController.signal)
+  const cancelPromt = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
+    if(cancelPromt) {
+      cancelReservation(id, abortController.signal)
+      .then(window.location.reload()) 
 }
 }
 
@@ -109,7 +110,7 @@ function handleCancel(reservation){
                     <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
                     )}
                     <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</a>
-                    <a className="btn btn-primary">Cancel</a>
+                    <a data-reservation-id-cancel={reservation.reservation_id} onClick={() => {handleCancel(reservation.reservation_id);}} className="btn btn-danger">Cancel</a>
                 </div>
             )
 

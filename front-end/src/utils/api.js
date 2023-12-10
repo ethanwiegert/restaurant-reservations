@@ -135,12 +135,12 @@ export async function updateReservation(reservation, signal){
 }
 
 
-export async function cancelReservation(reservation, signal){
-  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}/status`;
+export async function cancelReservation(reservation_id, signal){
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({data: reservation}),
+    body: JSON.stringify({data: { status: "cancelled" } }),
     signal,
   };
   return await fetchJson(url, options, {});
