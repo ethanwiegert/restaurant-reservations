@@ -121,7 +121,7 @@ function handleCancel(id){
                 <div className="row" key={table.table_id}>
                     <p className="col-4">{table.table_name}</p>
                     <p className="col-5">Capacity: {table.capacity}</p>
-                    {table.reservation_id === null ? <p id={`data-table-id-status=${table.table_id}`}>Free</p> : <p id={`data-table-id-status=${table.table_id}`}>Occupied</p>}
+                    {table.reservation_id === null ? <p id={`data-table-id-status=${table.table_id}`}>Status: Free</p> : <p id={`data-table-id-status=${table.table_id}`}>Status: Occupied</p>}
                     {table.reservation_id !== null && (
                     <button type="button" className="btn btn-primary ml-4" data-table-id-finish={table.table_id} onClick={() => {handleFinish(table.table_id);}}>Finish</button>)}
                     </div>
