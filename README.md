@@ -1,11 +1,13 @@
 # Restaurant Reservation Capstone
 This project involves both the frontend in React and the backend in Node for a restaurant reservation application.  The frontend involved making components in React along with Bootstrap whilst the backend used knex and an elephant SQL database.  The main features include 
+
 -Making a reservation 
 -Being able to edit or cancel it 
--making tables to seat reservations 
--seating the reservations 
--finishing the reservation and making the table free to be used again 
--searching reservations by phone number
+-Making tables to seat reservations 
+-Seating the reservations 
+-Finishing the reservation and making the table free to be used again 
+-Searching reservations by phone number
+
 The project also includes middleware for each feature on the backend that will display its errors as the user performs a request.  For example: not allowing the user to make a reservation on Tuesday since the restaurant is closed, or allowing a reservation to be made or changed to the past.
 
 
