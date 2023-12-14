@@ -50,29 +50,25 @@ function TableForm(){
         return () => abortController.abort();
       }
     
-    /*
-    Features left to add:
-    submitting saves, sends to "/dashboard"
-    display error messages from API(ErrorAlert?)
-    */
+
     
     return(
         <div>
-            <form className="row" onSubmit={handleSubmit}>
+            <form className="row mt-3" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                 <label className="form-label">Table Name</label>
-                <input id="table_name" name="table_name" type="text" value={table.table_name} onChange={handleChange}/>
+                <input className="form-control" id="table_name" name="table_name" type="text" value={table.table_name} onChange={handleChange}/>
                 </div>
 
                 <div className="col-md-6">
                 <label className="form-label">Capacity</label>
-                <input id="capacity" name="capacity" type="number" value={table.capacity} onChange={handleNumber}/>
+                <input className="form-control" id="capacity" name="capacity" type="number" value={table.capacity} onChange={handleNumber}/>
                 </div>
 
                 
 
-                <button type="cancel button " className="btn btn-secondary mb-2" onClick={handleCancel}>Cancel</button>
-                <button type="submit" className="btn btn-success mb-2">Submit</button>
+                <button type="cancel button " className="btn btn-secondary m-3" onClick={handleCancel}>Cancel</button>
+                <button type="submit" className="btn btn-success m-3">Submit</button>
             </form>
 
             <ErrorAlert error={formError} />

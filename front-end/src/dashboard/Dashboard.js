@@ -94,7 +94,9 @@ function handleCancel(id){
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {dateToday}</h4>
+      {reservations.length === 0 ? <h4 className="mb-0">No reservations for date {dateToday}</h4> : (
+                    <h4 className="mb-0">{reservations.length} reservations for {dateToday}</h4>
+                    )}
       </div>
       <button className="btn btn-primary mr-2 mb-3" type="next" onClick={handleNext}>Next</button>
       <button className="btn btn-primary mr-2 mb-3" type="today" onClick={handleToday}>Today</button>
@@ -102,15 +104,19 @@ function handleCancel(id){
       <ErrorAlert error={reservationsError} />
       <h4>Reservations</h4>
       {reservations.map((reservation)=>(
-                <div className="row" key={reservation.reservation_id}>
-                    <p className="col-3">{reservation.first_name} {reservation.last_name}</p>
-                    <p className="col-3">Time: {reservation.reservation_time} People: {reservation.people}</p>
-                    <p className="col-3">Status: {reservation.status}</p>
+                <div className="row border m-3" key={reservation.reservation_id}>
+               
+                    <p className="col-2 m-2">{reservation.first_name} {reservation.last_name}</p>
+                    <p className="col-2 m-2">Time: {reservation.reservation_time} People: {reservation.people}</p>
+                    <p className="col-2 m-2">Status: {reservation.status}</p>
+                    <div className="col-auto">
                     {reservation.status === "seated" ? null : (
-                    <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
+                    <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary m-2">Seat</a>
                     )}
-                    <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-primary">Edit</a>
-                    <a data-reservation-id-cancel={reservation.reservation_id} onClick={() => {handleCancel(reservation.reservation_id);}} className="btn btn-danger">Cancel</a>
+                    <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary m-2">Edit</a>
+                    <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => {handleCancel(reservation.reservation_id);}} className="btn btn-danger m-2">Cancel</button>
+                    </div>
+                    
                 </div>
             )
 
@@ -118,12 +124,12 @@ function handleCancel(id){
     <div>
       <h4>Tables</h4>
       {tables.map((table) => (
-                <div className="row" key={table.table_id}>
-                    <p className="col-4">{table.table_name}</p>
-                    <p className="col-5">Capacity: {table.capacity}</p>
-                    {table.reservation_id === null ? <p id={`data-table-id-status=${table.table_id}`}>Status: Free</p> : <p id={`data-table-id-status=${table.table_id}`}>Status: Occupied</p>}
+                <div className="row border m-3" key={table.table_id}>
+                    <p className="col-3 m-2">{table.table_name}</p>
+                    <p className="col-3 m-2">Capacity: {table.capacity}</p>
+                    {table.reservation_id === null ? <p className="m-2" id={`data-table-id-status=${table.table_id}`}>Status: Free</p> : <p className="m-2" id={`data-table-id-status=${table.table_id}`}>Status: Occupied</p>}
                     {table.reservation_id !== null && (
-                    <button type="button" className="btn btn-primary ml-4" data-table-id-finish={table.table_id} onClick={() => {handleFinish(table.table_id);}}>Finish</button>)}
+                    <button type="button" className="btn btn-primary ml-3 m-2" data-table-id-finish={table.table_id} onClick={() => {handleFinish(table.table_id);}}>Finish</button>)}
                     </div>
                     ))}
                    
