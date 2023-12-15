@@ -58,13 +58,18 @@ function SearchNumber(){
     
     return(
         <div>
-            <form className="row mt-3" onSubmit={handleSubmit}>
+            <form className="mt-3" onSubmit={handleSubmit}>
+                <div className="row m-2">
                 <div className="col-md-6">
                 <label className="form-label">Mobile Number</label>
                 <input className="form-control" id="mobile_number" name="mobile_number" type="tel" value={number} onChange={handleChange} required/>
                 </div>
-                <button type="cancel" className="btn btn-secondary m-3" onClick={handleCancel}>Cancel</button>
-                <button  type="submit" className="btn btn-success m-3">Find</button>
+                </div>
+
+                <div className="col-auto">
+                <button type="cancel" className="btn btn-secondary m-2" onClick={handleCancel}>Cancel</button>
+                <button  type="submit" className="btn btn-success m-2">Find</button>
+                </div>
             </form>
            
 
