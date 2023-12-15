@@ -10,10 +10,10 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="fixed-bottom">
-        <footer className="d-flex flex-wrap justify-content-between align-items-center p-2 m-3 border-top">
+    <div className="sticky-bottom">
+        <footer className="d-flex flex-wrap justify-content-between align-items-center m-3 p-2 border-top">
             
-                <span className="text-muted">Created by Ethan Wiegert</span>
+                <p className="fs-5 text-muted">Created by Ethan Wiegert</p>
             
         </footer>
     </div>
